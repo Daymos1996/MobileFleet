@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "537259521545",
+    "firebase_url": "https://mobilefleet-547ef.firebaseio.com",
+    "project_id": "mobilefleet-547ef",
+    "storage_bucket": "mobilefleet-547ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537259521545:android:6cbcb51cd79a552a",
+        "android_client_info": {
+          "package_name": "daymos.lodz.uni.math.pl.mobilefleet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537259521545-5j4kq4mc7jr266h6eenn6u7mfomhqm9e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBIGnD6HBYRLM5EZx7mqFiGrOscw0MYr0c"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

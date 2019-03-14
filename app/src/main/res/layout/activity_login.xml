@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/layout_background"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="login.LoginActivity">
+
+
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        app:srcCompat="@drawable/icon_truck"
+        android:src="@drawable/icon_truck"
+        />
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:textColor="#00222d"
+        android:textSize="30dp"
+        android:fontFamily="casual"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:text="Mobile Fleet"
+        />
+
+    <EditText
+        android:id="@+id/editTextEmail"
+        android:drawableLeft="@drawable/ic_account_box_black_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="32dp"
+        android:layout_weight="0"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Email"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:drawableLeft="@drawable/ic_password_24dp"
+        android:layout_width="wrap_content"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="32dp"
+        android:layout_weight="0"
+        android:ems="10"
+        android:textColor="#00222d"
+        android:hint="Password"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/buttunLogIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="32dp"
+        android:layout_weight="0"
+        android:background="@drawable/button_background"
+        android:text="Log in"
+        android:textSize="30dp"
+        android:textColor="#2A3c58"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/textViewRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:textColor="#00222d"
+        android:textSize="15dp"
+        android:fontFamily="casual"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:text=" Register"
+        android:drawableLeft="@drawable/ic_person_add_black_24dp"
+        />
+
+</LinearLayout>
