@@ -16,7 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".register.ChoseRegisterActivity"></activity>
+        <activity android:name="register.ChoiceRegisterActivity" />
+        <activity android:name="register.RegisterManagerActivity"></activity>
     </application>
 
 </manifest>
