@@ -9,6 +9,7 @@
         android:roundIcon="@drawable/icon_truck"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name="register.RegisterEmployeeActivity"></activity>
         <activity android:name="login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -17,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name="register.ChoiceRegisterActivity" />
-        <activity android:name="register.RegisterManagerActivity"></activity>
+        <activity android:name="register.RegisterManagerActivity" />
     </application>
 
 </manifest>

@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:textColor="#ba0101"
         android:textSize="20dp"
         android:fontFamily="casual"
@@ -124,14 +124,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:textColor="#ba0101"
         android:textSize="20dp"
         android:fontFamily="casual"
         android:gravity="center"
         android:textStyle="bold"
         android:clickable="true"
-        android:text="Give the firm information"
+        android:text="Give the NIP of the company \n where are you work"
         />
 
     <EditText
@@ -151,40 +151,6 @@
         android:ems="8"
         android:inputType="phone" />
 
-    <EditText
-        android:id="@+id/editTextNameFirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_name_firm_black_24dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:textColor="#00222d"
-        android:fontFamily="casual"
-        android:textStyle="bold"
-        android:background="#00000000"
-        android:gravity="center"
-        android:hint="Name firm"
-        android:ems="8"
-        android:inputType="text" />
-
-    <EditText
-        android:id="@+id/editTextAdressFrim"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_room_black_24dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="32dp"
-        android:layout_marginRight="32dp"
-        android:textColor="#00222d"
-        android:fontFamily="casual"
-        android:textStyle="bold"
-        android:background="#00000000"
-        android:gravity="center"
-        android:hint="Address"
-        android:ems="8"
-        android:inputType="text" />
-
 
     <Button
         android:id="@+id/buttonRegister"
@@ -195,7 +161,7 @@
         android:textColor="#2A3c58"
         android:fontFamily="casual"
         android:textStyle="bold"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="32dp"
         android:layout_marginRight="32dp"
         android:text="Register" />

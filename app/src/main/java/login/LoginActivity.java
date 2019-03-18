@@ -30,14 +30,14 @@ public class LoginActivity extends AppCompatActivity {
 
 
         registerTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, ChoiceRegisterActivity.class);
-                startActivity(intent);
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(LoginActivity.this, ChoiceRegisterActivity.class);
+            startActivity(intent);
 
-            }
-        });
-    }
+        }
+    });
+}
 
     private void init() {
         emailEditText = findViewById(R.id.editTextEmail);
