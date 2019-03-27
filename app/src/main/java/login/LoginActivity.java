@@ -1,6 +1,5 @@
 package login;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 import daymos.lodz.uni.math.pl.mobilefleet.R;
-import profile.ProfileManagerActivity;
+import profile.CoursesManagerActivity;
 import register.ChoiceRegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -87,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
                             user = auth.getCurrentUser();
                             Toast.makeText(LoginActivity.this,"You logged in",Toast.LENGTH_LONG).show();
 
-                            Intent intent = new Intent(LoginActivity.this, ProfileManagerActivity.class);
+                            Intent intent = new Intent(LoginActivity.this, CoursesManagerActivity.class);
                             startActivity(intent);
                         } else {
                             Toast.makeText(LoginActivity.this, "Error during login", Toast.LENGTH_LONG).show();

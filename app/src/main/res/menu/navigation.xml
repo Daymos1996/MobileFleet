@@ -18,5 +18,10 @@
         android:id="@+id/navigation_friends"
         android:icon="@drawable/ic_driversss_black_24dp"
         android:title="@string/title_drivers" />
+    <item
+        android:id="@+id/navigation_cars"
+        android:icon="@drawable/ic_drivers_black_24dp"
+        android:title="@string/title_cars" />
+
 
 </menu>

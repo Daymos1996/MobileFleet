@@ -5,4 +5,6 @@
     <string name="title_map">Map</string>
     <string name="title_notifications">Chat</string>
     <string name="title_drivers">Drivers</string>
+    <string name="title_cars">Cars</string>
+
 </resources>

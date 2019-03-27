@@ -2,6 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="daymos.lodz.uni.math.pl.mobilefleet">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/icon_truck"
@@ -9,12 +17,16 @@
         android:roundIcon="@drawable/icon_truck"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name="profile.CarsManagerActivity"></activity>
+        <activity android:name="profile.DriversActivity" />
+        <activity android:name="profile.ChatActivity" />
+        <activity android:name="profile.MapManagerActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name="profile.ProfileManagerActivity"></activity>
+        <activity android:name="profile.CoursesManagerActivity" />
         <activity android:name="register.RegisterEmployeeActivity" />
         <activity android:name="login.LoginActivity">
             <intent-filter>
