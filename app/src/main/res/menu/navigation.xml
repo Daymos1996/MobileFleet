@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_home"
+        android:icon="@drawable/ic_assignment_black_24dp"
+        android:title="@string/title_home" />
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_person_pin_circle_black_24dp"
+        android:title="@string/title_map" />
+
+    <item
+        android:id="@+id/navigation_notifications"
+        android:icon="@drawable/ic_chat_black_24dp"
+        android:title="@string/title_notifications" />
+    <item
+        android:id="@+id/navigation_friends"
+        android:icon="@drawable/ic_driversss_black_24dp"
+        android:title="@string/title_drivers" />
+
+</menu>

@@ -9,7 +9,13 @@
         android:roundIcon="@drawable/icon_truck"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="register.RegisterEmployeeActivity"></activity>
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+
+        <activity android:name="profile.ProfileManagerActivity"></activity>
+        <activity android:name="register.RegisterEmployeeActivity" />
         <activity android:name="login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

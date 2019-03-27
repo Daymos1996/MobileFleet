@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Mobile Fleet</string>
-    <string name="title_activity_loginn">Loginn</string>
+    <string name="title_activity_loginn">Login</string>
+    <string name="title_home">Courses</string>
+    <string name="title_map">Map</string>
+    <string name="title_notifications">Chat</string>
+    <string name="title_drivers">Drivers</string>
 </resources>

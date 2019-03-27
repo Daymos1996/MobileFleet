@@ -20,6 +20,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 import daymos.lodz.uni.math.pl.mobilefleet.R;
+import profile.ProfileManagerActivity;
 import register.ChoiceRegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -84,12 +85,12 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             user = auth.getCurrentUser();
-                            Toast.makeText(LoginActivity.this,"Udalo sie zalogowac",Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this,"You logged in",Toast.LENGTH_LONG).show();
 
-                            //Intent intent = new Intent(LoginActivity.this, ProfilActivity.class);
-                           // startActivity(intent);
+                            Intent intent = new Intent(LoginActivity.this, ProfileManagerActivity.class);
+                            startActivity(intent);
                         } else {
-                            Toast.makeText(LoginActivity.this, "Błąd logowania", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Error during login", Toast.LENGTH_LONG).show();
                            }
                     }
                 });
