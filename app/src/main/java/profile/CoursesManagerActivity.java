@@ -32,10 +32,14 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import daymos.lodz.uni.math.pl.mobilefleet.R;
+import users.StaticVariable;
 import users.employee;
 
 import static users.StaticVariable.DRIVERS_ID_LIST;
 import static users.StaticVariable.USER_INFORMATION;
+import static users.StaticVariable.NIP_INFORMATION;
+import static users.StaticVariable.POSITION_INFORMATION;
+
 
 
 
@@ -57,6 +61,8 @@ public class CoursesManagerActivity extends AppCompatActivity {
     private String FirstName;
     private String LastName;
     private String ProfilURL;
+    private String nip;
+    private String position;
 
 
 
@@ -75,13 +81,14 @@ public class CoursesManagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_courses_manager);
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
 
-        init();
-
         UserInformation = new ArrayList<>();
+
+        init();
 
         user = mAuth.getCurrentUser();
         userID = user.getUid();
         mProgresDiaolog = new ProgressDialog(this);
+
 
 
 
@@ -103,7 +110,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
         };
 
 
-        myRef = FirebaseDatabase.getInstance().getReference().child("333444555/"+"Employee/"+userID);
+        myRef = FirebaseDatabase.getInstance().getReference().child(nip+"/"+position+"/"+userID);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -116,10 +123,11 @@ public class CoursesManagerActivity extends AppCompatActivity {
             }
         });
 
+
         profilURL.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                openFileChooser(userID);
+                openFileChooser();
                 return false;
             }
         });
@@ -214,7 +222,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
         }
         if (uInfo.getProfilURl() != null) {
             ProfilURL=uInfo.getProfilURl();
-            Picasso.with(this).load(ProfilURL).into(profilURL);
+           Picasso.with(this).load(ProfilURL).into(profilURL);
             UserInformation.add(ProfilURL);
 
         }
@@ -222,7 +230,6 @@ public class CoursesManagerActivity extends AppCompatActivity {
     }
 
     private void init() {
-        reference= FirebaseDatabase.getInstance().getReference().child("Manager");
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -232,9 +239,15 @@ public class CoursesManagerActivity extends AppCompatActivity {
         last_nameTextView = findViewById(R.id.txtLastName);
         profilURL = findViewById(R.id.avatar);
 
+        nip=getIntent().getStringExtra(StaticVariable.NIP_INFORMATION);
+        position=getIntent().getStringExtra(StaticVariable.POSITION_INFORMATION);
+        UserInformation.add(nip);
+        UserInformation.add(position);
+
+
     }
 
-    private void openFileChooser(final String userID) {
+    private void openFileChooser() {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         // intent.setAction(Intent.ACTION_PICK);
@@ -289,12 +302,13 @@ public class CoursesManagerActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Uri downloadUri) {
                     String uploadId = downloadUri.toString();
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference("333444555/"+"Employee/").child(userID);
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/"+position+"/").child(userID);
                     dR.child("profilURl").setValue(uploadId);
                 }
             });
         }
     }
+
 
     private void toastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();

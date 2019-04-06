@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import users.employee;
 
+import static users.StaticVariable.NIP_INFORMATION;
+import static users.StaticVariable.POSITION_INFORMATION;
 import static users.StaticVariable.USER_INFORMATION;
 
 public class CarsManagerActivity extends AppCompatActivity {
@@ -52,6 +54,8 @@ public class CarsManagerActivity extends AppCompatActivity {
     FirebaseUser user;
     private String userID;
     private ArrayList<String> UserInformation;
+    private String nip;
+    private String position;
 
 
 
@@ -96,7 +100,8 @@ public class CarsManagerActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
                         Intent course = new Intent(CarsManagerActivity.this, CoursesManagerActivity.class);
-                        course.putExtra(USER_INFORMATION, UserInformation);
+                        course.putExtra(NIP_INFORMATION,nip);
+                        course.putExtra(POSITION_INFORMATION,position);
                         startActivity(course);
                         return true;
                     case R.id.navigation_dashboard:
@@ -144,9 +149,11 @@ public class CarsManagerActivity extends AppCompatActivity {
     }
     private void loadUserInfo(){
         UserInformation =(ArrayList<String>)getIntent().getSerializableExtra(USER_INFORMATION);
-        first_nameTextView.setText(UserInformation.get(0));
-        last_nameTextView.setText(UserInformation.get(1));
-        Picasso.with(this).load(UserInformation.get(2)).into(profilURL);
+        nip=UserInformation.get(0);
+        position=UserInformation.get(1);
+        first_nameTextView.setText(UserInformation.get(2));
+        last_nameTextView.setText(UserInformation.get(3));
+        Picasso.with(this).load(UserInformation.get(4)).into(profilURL);
     }
 
     private void openFileChooser(final String userID) {

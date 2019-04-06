@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
         android:allowBackup="true"
@@ -17,7 +18,8 @@
         android:roundIcon="@drawable/icon_truck"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="profile.CarsManagerActivity"></activity>
+        <activity android:name="profile.ProfileActivity"></activity>
+        <activity android:name="profile.CarsManagerActivity" />
         <activity android:name="profile.DriversActivity" />
         <activity android:name="profile.ChatActivity" />
         <activity android:name="profile.MapManagerActivity" />
@@ -38,5 +40,7 @@
         <activity android:name="register.ChoiceRegisterActivity" />
         <activity android:name="register.RegisterManagerActivity" />
     </application>
+
+
 
 </manifest>

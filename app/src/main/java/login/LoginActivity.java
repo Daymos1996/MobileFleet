@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,17 +23,27 @@ import com.google.firebase.database.FirebaseDatabase;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import profile.CoursesManagerActivity;
 import register.ChoiceRegisterActivity;
+import register.RegisterEmployeeActivity;
+import register.RegisterManagerActivity;
+import static users.StaticVariable.NIP_INFORMATION;
+import static users.StaticVariable.POSITION_INFORMATION;
+
 
 public class LoginActivity extends AppCompatActivity {
 
     private EditText emailEditText;
     private EditText passwordEditText;
+    private EditText nipText;
     private TextView registerTextView;
     private Button buttunLogIn;
+    private RadioButton radioButtoManager;
+    private RadioButton radioButtonEmployee;
+    private RadioGroup radioGroup;
 
     private FirebaseDatabase database;
     private FirebaseUser user;
     private FirebaseAuth auth;
+    private String position;
 
 
 
@@ -52,14 +64,35 @@ public class LoginActivity extends AppCompatActivity {
 
             }
         });
-        buttunLogIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                LoginUser();
 
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener()
+        {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch(checkedId){
+                    case R.id.radioButtoManager:
+                        buttunLogIn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                position="Manager";
+                                LoginUser(position);
+                            }
+                        });
+                        break;
+                    case R.id.radioButtonEmployee:
+                        buttunLogIn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                position="Employee";
+                                LoginUser(position);
 
+                            }
+                        });
+                        break;
+
+                }
             }
         });
+
 }
 
     private void init() {
@@ -71,28 +104,56 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.editTextPassword);
         buttunLogIn = findViewById(R.id.buttunLogIn);
         registerTextView = findViewById(R.id.textViewRegister);
+        nipText = findViewById(R.id.editTextNIP);
+        radioGroup=findViewById(R.id.radioGroup);
+        radioButtoManager=findViewById(R.id.radioButtoManager);
+        radioButtonEmployee=findViewById(R.id.radioButtonEmployee);
 
     }
 
-    private void LoginUser() {
+    private void LoginUser(final String position) {
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
+        final String nip = nipText.getText().toString().trim();
 
-        auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            user = auth.getCurrentUser();
-                            Toast.makeText(LoginActivity.this,"You logged in",Toast.LENGTH_LONG).show();
+        if(position=="Manager") {
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                user = auth.getCurrentUser();
+                                Toast.makeText(LoginActivity.this, "Loggin in", Toast.LENGTH_LONG).show();
 
-                            Intent intent = new Intent(LoginActivity.this, CoursesManagerActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Error during login", Toast.LENGTH_LONG).show();
-                           }
-                    }
-                });
+                                Intent intent = new Intent(LoginActivity.this, CoursesManagerActivity.class);
+                                intent.putExtra(NIP_INFORMATION,nip);
+                                intent.putExtra(POSITION_INFORMATION,position);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Error during login", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+        }
+        if(position=="Employee"){
+            auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                user = auth.getCurrentUser();
+                                Toast.makeText(LoginActivity.this, "Loggin in", Toast.LENGTH_LONG).show();
+
+                                Intent intent = new Intent(LoginActivity.this, CoursesManagerActivity.class);
+                                intent.putExtra(NIP_INFORMATION,nip);
+                                intent.putExtra(POSITION_INFORMATION,position);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(LoginActivity.this, "Error during login", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+        }
 
     }
 

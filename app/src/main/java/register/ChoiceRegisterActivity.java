@@ -22,7 +22,6 @@ public class ChoiceRegisterActivity extends AppCompatActivity {
     private RadioButton radioButtonEmployee;
     private RadioGroup radioGroup;
     private Button buttonNext;
-    private RadioButton radioGroupButton;
 
 
     @Override

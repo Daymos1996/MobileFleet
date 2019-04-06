@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -35,6 +37,8 @@ import daymos.lodz.uni.math.pl.mobilefleet.R;
 import users.StaticVariable;
 import users.employee;
 
+import static users.StaticVariable.NIP_INFORMATION;
+import static users.StaticVariable.POSITION_INFORMATION;
 import static users.StaticVariable.USER_INFORMATION;
 
 public class DriversActivity extends AppCompatActivity {
@@ -52,13 +56,23 @@ public class DriversActivity extends AppCompatActivity {
     FirebaseUser user;
     private String userID;
 
-
-
     private ImageView profilURL;
     private TextView first_nameTextView;
     private TextView last_nameTextView;
     private Toolbar mToolbar;
     private ArrayList<String> UserInformation;
+
+    private RecyclerView driverListRecyclerView;
+    private DriversRecyclerViewAdapter driversRecyclerViewAdapter;
+    private DatabaseReference userDatabaseRef;
+
+    private ArrayList<String> driversIdList;
+    private String nip;
+    private String position;
+
+
+
+
 
 
     @Override
@@ -68,9 +82,14 @@ public class DriversActivity extends AppCompatActivity {
         init();
         loadUserInfo();
 
+
         user = mAuth.getCurrentUser();
         userID = user.getUid();
         mProgresDiaolog = new ProgressDialog(this);
+        driversIdList = new ArrayList<>();
+        driversIdFromDatabase();
+        managerIdFromDatabase();
+
 
 
 
@@ -82,6 +101,16 @@ public class DriversActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/"+position+"/");
+
+        driversRecyclerViewAdapter = new DriversRecyclerViewAdapter(DriversActivity.this, userDatabaseRef,driversIdList);
+        driverListRecyclerView.setLayoutManager( new LinearLayoutManager(this));
+        driverListRecyclerView.setHasFixedSize(true);
+        driverListRecyclerView.setAdapter(driversRecyclerViewAdapter);
+        driversRecyclerViewAdapter.notifyDataSetChanged();
+
+
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         Menu menu = navigation.getMenu();
@@ -96,7 +125,8 @@ public class DriversActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
                         Intent course = new Intent(DriversActivity.this, CoursesManagerActivity.class);
-                        course.putExtra(USER_INFORMATION, UserInformation);
+                        course.putExtra(NIP_INFORMATION,nip);
+                        course.putExtra(POSITION_INFORMATION,position);
                         startActivity(course);
                         return true;
                     case R.id.navigation_dashboard:
@@ -133,7 +163,6 @@ public class DriversActivity extends AppCompatActivity {
 
 
     private void init() {
-        reference= FirebaseDatabase.getInstance().getReference().child("Manager");
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -141,15 +170,21 @@ public class DriversActivity extends AppCompatActivity {
 
         first_nameTextView = findViewById(R.id.txtFirstName);
         last_nameTextView = findViewById(R.id.txtLastName);
+        driverListRecyclerView=findViewById(R.id.driversRecyclerView);
         profilURL = findViewById(R.id.avatar);
+
+
+
 
     }
 
     private void loadUserInfo(){
         UserInformation =(ArrayList<String>)getIntent().getSerializableExtra(USER_INFORMATION);
-        first_nameTextView.setText(UserInformation.get(0));
-        last_nameTextView.setText(UserInformation.get(1));
-        Picasso.with(this).load(UserInformation.get(2)).into(profilURL);
+        nip=UserInformation.get(0);
+        position=UserInformation.get(1);
+        first_nameTextView.setText(UserInformation.get(2));
+        last_nameTextView.setText(UserInformation.get(3));
+        Picasso.with(this).load(UserInformation.get(4)).into(profilURL);
     }
 
     private void openFileChooser(final String userID) {
@@ -207,7 +242,7 @@ public class DriversActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Uri downloadUri) {
                     String uploadId = downloadUri.toString();
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference("333444555/"+"Employee/").child(userID);
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/"+position+"/").child(userID);
                     dR.child("profilURl").setValue(uploadId);
                 }
             });
@@ -215,8 +250,45 @@ public class DriversActivity extends AppCompatActivity {
     }
 
 
+    private void setDriversList(DataSnapshot dataSnapshot) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            if (ds.getKey()!=userID) {
+                driversIdList.add(ds.getKey());
+           }
+        }
+    }
 
-    private void toastMessage(String message) {
+    private void driversIdFromDatabase() {
+        DatabaseReference allEmployeeDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/"+"Employee/");
+        allEmployeeDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setDriversList(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
+    }
+
+    private void managerIdFromDatabase() {
+        DatabaseReference allManagerDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/"+"Manager/");
+        allManagerDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setDriversList(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
+    }
+
+        private void toastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
