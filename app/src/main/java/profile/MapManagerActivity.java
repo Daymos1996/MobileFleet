@@ -31,6 +31,7 @@ import chat.ChatActivity;
 import chat.ChatListActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import drivers.DriversActivity;
+import login.LoginActivity;
 
 import static users.StaticVariable.CHAT_EMPLOYEE_ID_LIST;
 import static users.StaticVariable.DRIVERS_ID_LIST;
@@ -57,7 +58,6 @@ public class MapManagerActivity extends AppCompatActivity {
     private ArrayList<String>  chatEmployeeList;
 
     private String nip;
-    private String position;
 
 
 
@@ -70,6 +70,9 @@ public class MapManagerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_manager);
+        mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("");
 
         driversIdList=new ArrayList<>();
         chatEmployeeList=new ArrayList<>();
@@ -106,7 +109,6 @@ public class MapManagerActivity extends AppCompatActivity {
                     case R.id.navigation_home:
                         Intent course = new Intent(MapManagerActivity.this, CoursesManagerActivity.class);
                         course.putExtra(NIP_INFORMATION,nip);
-                        course.putExtra(POSITION_INFORMATION,position);
                         course.putExtra(DRIVERS_ID_LIST,driversIdList);
                         course.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         startActivity(course);
@@ -142,11 +144,37 @@ public class MapManagerActivity extends AppCompatActivity {
         };
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-
-
-
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        if (item.getItemId() == R.id.changeUserInformation) {
+            Intent intent = new Intent(MapManagerActivity.this, EditProfilInformationActivity.class);
+            intent.putExtra(USER_INFORMATION, UserInformation);
+            startActivity(intent);
+
+        }
+
+        if (item.getItemId() == R.id.main_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(MapManagerActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+
+        return true;
+    }
+
 
 
     private void init() {
@@ -166,10 +194,9 @@ public class MapManagerActivity extends AppCompatActivity {
         driversIdList =(ArrayList<String>)getIntent().getSerializableExtra(DRIVERS_ID_LIST);
         chatEmployeeList =(ArrayList<String>)getIntent().getSerializableExtra(CHAT_EMPLOYEE_ID_LIST);
         nip=UserInformation.get(0);
-        position=UserInformation.get(1);
-        first_nameTextView.setText(UserInformation.get(2));
-        last_nameTextView.setText(UserInformation.get(3));
-        Picasso.with(this).load(UserInformation.get(4)).into(profilURL);
+        first_nameTextView.setText(UserInformation.get(1));
+        last_nameTextView.setText(UserInformation.get(2));
+        Picasso.with(this).load(UserInformation.get(3)).into(profilURL);
     }
 
     private void openFileChooser(final String userID) {

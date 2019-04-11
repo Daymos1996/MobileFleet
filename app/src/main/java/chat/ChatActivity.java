@@ -1,18 +1,18 @@
 package chat;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
+
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,19 +22,19 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
+
 
 import java.util.ArrayList;
 
 import daymos.lodz.uni.math.pl.mobilefleet.R;
+import login.LoginActivity;
+import profile.CoursesManagerActivity;
 import users.StaticVariable;
 
 
@@ -58,6 +58,8 @@ public class ChatActivity extends AppCompatActivity {
     FloatingActionButton fab;
     private RecyclerView messagesListRecyclerView;
     private ChatRecyclerViewAdapter chatRecyclerViewAdapter;
+
+
 
     private ImageView profilURL;
     private TextView first_nameTextView;
@@ -157,8 +159,6 @@ public class ChatActivity extends AppCompatActivity {
         chatRecyclerViewAdapter.notifyDataSetChanged();
 
     }
-
-
 
 
 

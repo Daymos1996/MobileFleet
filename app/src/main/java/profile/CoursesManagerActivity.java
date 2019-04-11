@@ -16,7 +16,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -35,22 +37,25 @@ import chat.ChatActivity;
 import chat.ChatListActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import drivers.DriversActivity;
+import login.LoginActivity;
 import users.StaticVariable;
 import users.employee;
 
 import static users.StaticVariable.CHAT_EMPLOYEE_ID_LIST;
 import static users.StaticVariable.DRIVERS_ID_LIST;
+import static users.StaticVariable.NIP_INFORMATION;
 import static users.StaticVariable.USER_INFORMATION;
 
 
 public class CoursesManagerActivity extends AppCompatActivity {
 
     private static final String TAG = "ViewDatabase";
+    private Toolbar mToolbar;
+
     public static final int PICK_IMAGE = 1;
 
 
     private FirebaseAuth mAuth;
-    private StorageReference mStorage;
     private DatabaseReference myRef;
     private DatabaseReference reference;
     private FirebaseDatabase database;
@@ -62,14 +67,12 @@ public class CoursesManagerActivity extends AppCompatActivity {
     private String LastName;
     private String ProfilURL;
     private String nip;
-    private String position;
 
 
 
     private ImageView profilURL;
     private TextView first_nameTextView;
     private TextView last_nameTextView;
-    private Toolbar mToolbar;
     public ArrayList<String> UserInformation;
     private ArrayList<String> driversIdList;
     private ArrayList<String> chatEmployeeList;
@@ -83,6 +86,8 @@ public class CoursesManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courses_manager);
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("");
 
         UserInformation = new ArrayList<>();
 
@@ -131,14 +136,6 @@ public class CoursesManagerActivity extends AppCompatActivity {
             }
         });
 
-
-        profilURL.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                openFileChooser();
-                return false;
-            }
-        });
 
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         Menu menu = navigation.getMenu();
@@ -196,6 +193,64 @@ public class CoursesManagerActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        if (item.getItemId() == R.id.changeUserInformation) {
+            Intent intent = new Intent(CoursesManagerActivity.this, EditProfilInformationActivity.class);
+            intent.putExtra(USER_INFORMATION, UserInformation);
+            startActivity(intent);
+        }
+
+        if (item.getItemId() == R.id.main_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(CoursesManagerActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
+
+
+        return true;
+    }
+
+    /*
+    public void deleteUser(String userID) {
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference userData = FirebaseDatabase.getInstance().getReference(nip+"/Employee/").child(userID);
+
+        userData.removeValue()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User account deleted.");
+                        }
+                    }
+                });
+
+
+        user.delete()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "User account deleted.");
+                        }
+                    }
+                });
+
+    }
+*/
     private void showUserInformation(DataSnapshot ds) {
         employee uInfo = new employee();
         if (ds.child("first_name").exists()) {
@@ -208,7 +263,12 @@ public class CoursesManagerActivity extends AppCompatActivity {
         if (ds.child("profilURl").exists()) {
             uInfo.setProfilURl(ds.child("profilURl").getValue().toString());
         }
-
+        if (ds.child("phone").exists()) {
+            uInfo.setPhone(ds.child("phone").getValue().toString());
+        }
+        if (ds.child("email").exists()) {
+            uInfo.setEmail(ds.child("email").getValue().toString());
+        }
 
 
         //display all the information
@@ -242,87 +302,22 @@ public class CoursesManagerActivity extends AppCompatActivity {
             UserInformation.add(ProfilURL);
 
         }
-
+        UserInformation.add(uInfo.getEmail());
+        UserInformation.add(uInfo.getPhone());
     }
 
     private void init() {
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        mStorage = FirebaseStorage.getInstance().getReference();
-
 
         first_nameTextView = findViewById(R.id.txtFirstName);
         last_nameTextView = findViewById(R.id.txtLastName);
         profilURL = findViewById(R.id.avatar);
 
         nip=getIntent().getStringExtra(StaticVariable.NIP_INFORMATION);
-        position=getIntent().getStringExtra(StaticVariable.POSITION_INFORMATION);
         UserInformation.add(nip);
-        UserInformation.add(position);
 
 
-    }
-
-    private void openFileChooser() {
-        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        // intent.setAction(Intent.ACTION_PICK);
-        startActivityForResult(intent, PICK_IMAGE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            Uri mImageProfileUri = data.getData();
-            /*
-            CropImage.activity(imagePath)
-                    .setGuidelines(CropImageView.Guidelines.ON_TOUCH)
-                    .setAspectRatio(1, 1)
-                    .start(ProfilActivity.this);
-        }
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode==RESULT_OK) {
-                mImageProfileUri = result.getUri();
-
-                Picasso.with(this).load(mImageProfileUri).into(profilURL);
-            }
-            else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
-                Exception error = result.getError();
-            }
-            */
-
-            // DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Users").child(userID);
-            // dR.child("profilURl").setValue(mImageProfileUri);
-            // toastMessage("Username update");
-
-            mProgresDiaolog.setMessage("Uploading...");
-            mProgresDiaolog.show();
-
-            final StorageReference filepath = mStorage.child("profile_img").child(userID).child("profile_picture.jpg");
-            filepath.putFile(mImageProfileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    mProgresDiaolog.dismiss();
-                    toastMessage("Zaladowano zdjecie ");
-                }
-            });
-
-
-            //dodanie do bazy danych
-            filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri downloadUri) {
-                    String uploadId = downloadUri.toString();
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Employee/").child(userID);
-                    dR.child("profilURl").setValue(uploadId);
-                }
-            });
-        }
     }
 
     private void setDriversList(DataSnapshot dataSnapshot) {
@@ -372,5 +367,36 @@ public class CoursesManagerActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        myRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/"+ userID);
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                showUserInformation(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
 
 }

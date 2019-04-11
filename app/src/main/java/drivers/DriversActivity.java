@@ -34,9 +34,11 @@ import java.util.ArrayList;
 
 import chat.ChatListActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
+import login.LoginActivity;
 import profile.CarsManagerActivity;
 import chat.ChatActivity;
 import profile.CoursesManagerActivity;
+import profile.EditProfilInformationActivity;
 import profile.MapManagerActivity;
 
 import static users.StaticVariable.CHAT_EMPLOYEE_ID_LIST;
@@ -75,10 +77,6 @@ public class DriversActivity extends AppCompatActivity {
     private ArrayList<String> driversIdList;
     private ArrayList<String>  chatEmployeeList;
     private String nip;
-    private String position;
-
-
-
 
 
 
@@ -86,6 +84,10 @@ public class DriversActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drivers);
+        mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setTitle("");
+
         driversIdList = new ArrayList<>();
         chatEmployeeList= new ArrayList<>();
 
@@ -99,14 +101,6 @@ public class DriversActivity extends AppCompatActivity {
         mProgresDiaolog = new ProgressDialog(this);
 
 
-
-        profilURL.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                openFileChooser(userID);
-                return false;
-            }
-        });
 
         userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
 
@@ -138,7 +132,6 @@ public class DriversActivity extends AppCompatActivity {
                     case R.id.navigation_home:
                         Intent course = new Intent(DriversActivity.this, CoursesManagerActivity.class);
                         course.putExtra(NIP_INFORMATION,nip);
-                        course.putExtra(POSITION_INFORMATION,position);
                         course.putExtra(DRIVERS_ID_LIST,driversIdList);
                         course.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
 
@@ -176,10 +169,36 @@ public class DriversActivity extends AppCompatActivity {
         };
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+
+        if (item.getItemId() == R.id.changeUserInformation) {
+            Intent intent = new Intent(DriversActivity.this, EditProfilInformationActivity.class);
+            intent.putExtra(USER_INFORMATION, UserInformation);
+            startActivity(intent);
+
+        }
+
+        if (item.getItemId() == R.id.main_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(DriversActivity.this, LoginActivity.class);
+            startActivity(intent);
+        }
 
 
-
-
+        return true;
     }
 
 
@@ -201,76 +220,13 @@ public class DriversActivity extends AppCompatActivity {
         driversIdList=(ArrayList<String>)getIntent().getSerializableExtra(DRIVERS_ID_LIST);
         chatEmployeeList=(ArrayList<String>)getIntent().getSerializableExtra(CHAT_EMPLOYEE_ID_LIST);
         nip=UserInformation.get(0);
-        position=UserInformation.get(1);
-        first_nameTextView.setText(UserInformation.get(2));
-        last_nameTextView.setText(UserInformation.get(3));
-        Picasso.with(this).load(UserInformation.get(4)).into(profilURL);
-    }
-
-    private void openFileChooser(final String userID) {
-        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        intent.setType("image/*");
-        // intent.setAction(Intent.ACTION_PICK);
-        startActivityForResult(intent, PICK_IMAGE);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == PICK_IMAGE && resultCode == RESULT_OK
-                && data != null && data.getData() != null) {
-            Uri mImageProfileUri = data.getData();
-            /*
-            CropImage.activity(imagePath)
-                    .setGuidelines(CropImageView.Guidelines.ON_TOUCH)
-                    .setAspectRatio(1, 1)
-                    .start(ProfilActivity.this);
-        }
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode==RESULT_OK) {
-                mImageProfileUri = result.getUri();
-
-                Picasso.with(this).load(mImageProfileUri).into(profilURL);
-            }
-            else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
-                Exception error = result.getError();
-            }
-            */
-
-            // DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Users").child(userID);
-            // dR.child("profilURl").setValue(mImageProfileUri);
-            // toastMessage("Username update");
-
-            mProgresDiaolog.setMessage("Uploading...");
-            mProgresDiaolog.show();
-
-            final StorageReference filepath = mStorage.child("profile_img").child(userID).child("profile_picture.jpg");
-            filepath.putFile(mImageProfileUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    mProgresDiaolog.dismiss();
-                    toastMessage("Zaladowano zdjecie ");
-                }
-            });
-
-
-            //dodanie do bazy danych
-            filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                @Override
-                public void onSuccess(Uri downloadUri) {
-                    String uploadId = downloadUri.toString();
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Employee/").child(userID);
-                    dR.child("profilURl").setValue(uploadId);
-                }
-            });
-        }
+        first_nameTextView.setText(UserInformation.get(1));
+        last_nameTextView.setText(UserInformation.get(2));
+        Picasso.with(this).load(UserInformation.get(3)).into(profilURL);
     }
 
 
-        private void toastMessage(String message) {
+    private void toastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 

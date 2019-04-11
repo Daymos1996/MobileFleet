@@ -40,16 +40,18 @@ public class ChatFriendsRecyclerViewAdapter extends RecyclerView.Adapter<ChatFri
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     for (int i = 0; i < chatFriendsIdList.size(); i++) {
                         if (postSnapshot.getKey().equals(chatFriendsIdList.get(i))) {
-                            FindDrivers friend = new FindDrivers();
+                            FindDrivers employee = new FindDrivers();
                             String FirstName = postSnapshot.child("first_name").getValue().toString();
                             String LastName=  postSnapshot.child("last_name").getValue().toString();
-                            String zdjecie = postSnapshot.child("profilURl").getValue().toString();
+                            String photo = postSnapshot.child("profilURl").getValue().toString();
                             String id = postSnapshot.getKey();
-                            friend.setFirst_name(FirstName);
-                            friend.setLast_name(LastName);
-                            friend.setProfilURl(zdjecie);
-                            friend.setId(id);
-                            chatFriendlist.add(friend);
+                            String nip = postSnapshot.child("nip").getValue().toString();
+                            employee.setFirst_name(FirstName);
+                            employee.setLast_name(LastName);
+                            employee.setProfilURl(photo);
+                            employee.setId(id);
+                            employee.setNip(nip);
+                            chatFriendlist.add(employee);
                         }
                     }
                 }
@@ -80,8 +82,10 @@ public class ChatFriendsRecyclerViewAdapter extends RecyclerView.Adapter<ChatFri
             @Override
             public void onClick(View v) {
                 String id = chatFriendlist.get(i).getId();
+                String nip=chatFriendlist.get(i).getNip();
                 Intent intent = new Intent(mContext, ChatActivity.class);
                 intent.putExtra(StaticVariable.KEY_CHAT, id);
+                intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
                 mContext.startActivity(intent);
 
             }

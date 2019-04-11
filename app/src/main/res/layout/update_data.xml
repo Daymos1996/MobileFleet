@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/layout_background"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <EditText
+        android:id="@+id/editTextName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Wprowadz dane"
+        android:drawableLeft="@drawable/ic_create_black_24dp"
+        android:textColor="#000000"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        />
+
+
+
+    <Button
+        android:id="@+id/buttonUpdateArtist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Update"
+        android:textSize="30dp"
+        android:textColor="#2A3c58"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button_background"
+        />
+
+
+
+
+
+</LinearLayout>

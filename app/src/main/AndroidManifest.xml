@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/icon_truck"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="chat.ChatListActivity"></activity>
+        <activity android:name="profile.EditProfilInformationActivity"></activity>
+        <activity android:name="chat.ChatListActivity" />
         <activity android:name="profile.ProfileActivity" />
         <activity android:name="profile.CarsManagerActivity" />
         <activity android:name="drivers.DriversActivity" />

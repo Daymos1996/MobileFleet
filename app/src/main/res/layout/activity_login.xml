@@ -90,27 +90,6 @@
         android:background="#00000000"
         android:inputType="phone" />
 
-    <RadioGroup
-        android:id="@+id/radioGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <RadioButton
-            android:id="@+id/radioButtoManager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Login as a manager"
-            android:textSize="20dp" />
-
-        <RadioButton
-            android:id="@+id/radioButtonEmployee"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Login as a employee"
-            android:textSize="20dp" />
-    </RadioGroup>
 
     <Button
         android:id="@+id/buttunLogIn"
