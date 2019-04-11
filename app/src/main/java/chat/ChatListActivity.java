@@ -1,14 +1,16 @@
-package profile;
+package chat;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,13 +34,20 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import daymos.lodz.uni.math.pl.mobilefleet.R;
-import users.employee;
+import drivers.DriversActivity;
+import drivers.DriversRecyclerViewAdapter;
+import profile.CarsManagerActivity;
+import profile.CoursesManagerActivity;
+import profile.MapManagerActivity;
 
+import static users.StaticVariable.CHAT_EMPLOYEE_ID_LIST;
+import static users.StaticVariable.DRIVERS_ID_LIST;
 import static users.StaticVariable.NIP_INFORMATION;
 import static users.StaticVariable.POSITION_INFORMATION;
 import static users.StaticVariable.USER_INFORMATION;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatListActivity extends AppCompatActivity {
+
     private static final String TAG = "ViewDatabase";
     public static final int PICK_IMAGE = 1;
 
@@ -51,8 +60,17 @@ public class ChatActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener mAuthListener;
     private ProgressDialog mProgresDiaolog;
     FirebaseUser user;
+
+    private ViewPager mViewPager;
+    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private TabLayout mTabLayout;
+
+
+
     private String userID;
     private ArrayList<String> UserInformation;
+    private ArrayList<String> driversIdList;
+    private ArrayList<String> chatEmployeeList;
     private String nip;
     private String position;
 
@@ -66,11 +84,25 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.activity_chat_list);
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
+
+        mViewPager = (ViewPager) findViewById(R.id.main_tabPager);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        mTabLayout = (TabLayout) findViewById(R.id.main_tabs);
+        mTabLayout.setupWithViewPager(mViewPager);
+
+
+        driversIdList = new ArrayList<>();
+        chatEmployeeList=new ArrayList<>();
 
         init();
         loadUserInfo();
+
+
+
 
         user = mAuth.getCurrentUser();
         userID = user.getUid();
@@ -99,28 +131,36 @@ public class ChatActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navigation_home:
-                        Intent course = new Intent(ChatActivity.this, CoursesManagerActivity.class);
+                        Intent course = new Intent(ChatListActivity.this, CoursesManagerActivity.class);
                         course.putExtra(NIP_INFORMATION,nip);
                         course.putExtra(POSITION_INFORMATION,position);
+                        course.putExtra(DRIVERS_ID_LIST,driversIdList);
+                        course.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         startActivity(course);
                         return true;
                     case R.id.navigation_dashboard:
-                        Intent map = new Intent(ChatActivity.this, MapManagerActivity.class);
+                        Intent map = new Intent(ChatListActivity.this, MapManagerActivity.class);
                         map.putExtra(USER_INFORMATION, UserInformation);
+                        map.putExtra(DRIVERS_ID_LIST,driversIdList);
+                        map.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         startActivity(map);
                         return true;
                     case R.id.navigation_notifications:
-                       break;
+                        break;
 
                     case R.id.navigation_friends:
-                        Intent drivers = new Intent(ChatActivity.this, DriversActivity.class);
+                        Intent drivers = new Intent(ChatListActivity.this, DriversActivity.class);
                         drivers.putExtra(USER_INFORMATION, UserInformation);
+                        drivers.putExtra(DRIVERS_ID_LIST,driversIdList);
+                        drivers.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         startActivity(drivers);
                         return true;
 
                     case R.id.navigation_cars:
-                        Intent cars = new Intent(ChatActivity.this, CarsManagerActivity.class);
+                        Intent cars = new Intent(ChatListActivity.this, CarsManagerActivity.class);
                         cars.putExtra(USER_INFORMATION, UserInformation);
+                        cars.putExtra(DRIVERS_ID_LIST,driversIdList);
+                        cars.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         startActivity(cars);
                         return true;
 
@@ -139,7 +179,6 @@ public class ChatActivity extends AppCompatActivity {
 
 
     private void init() {
-        reference= FirebaseDatabase.getInstance().getReference().child("Manager");
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         mStorage = FirebaseStorage.getInstance().getReference();
@@ -152,6 +191,9 @@ public class ChatActivity extends AppCompatActivity {
     }
     private void loadUserInfo(){
         UserInformation =(ArrayList<String>)getIntent().getSerializableExtra(USER_INFORMATION);
+        driversIdList =(ArrayList<String>)getIntent().getSerializableExtra(DRIVERS_ID_LIST);
+        chatEmployeeList=(ArrayList<String>)getIntent().getSerializableExtra(CHAT_EMPLOYEE_ID_LIST);
+
         nip=UserInformation.get(0);
         position=UserInformation.get(1);
         first_nameTextView.setText(UserInformation.get(2));
@@ -214,7 +256,7 @@ public class ChatActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Uri downloadUri) {
                     String uploadId = downloadUri.toString();
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference("333444555/"+"Employee/").child(userID);
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Employee/").child(userID);
                     dR.child("profilURl").setValue(uploadId);
                 }
             });
@@ -229,5 +271,4 @@ public class ChatActivity extends AppCompatActivity {
 
 
 }
-
 

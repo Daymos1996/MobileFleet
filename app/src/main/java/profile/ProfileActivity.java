@@ -21,9 +21,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import chat.ChatActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import de.hdodenhof.circleimageview.CircleImageView;
+import users.FindDrivers;
+import users.StaticVariable;
 
 import static users.StaticVariable.DRIVER_INFORMATION;
 import static users.StaticVariable.USER_INFORMATION;
@@ -38,7 +42,8 @@ public class ProfileActivity extends AppCompatActivity {
     private CircleImageView phone;
     private CircleImageView map;
     private CircleImageView chat;
-
+    private String nip;
+    private String otherUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +57,15 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 makeCallPhone();
+            }
+        });
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
+                intent.putExtra(StaticVariable.KEY_CHAT, otherUserID);
+                intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
+                startActivity(intent);
             }
         });
 
@@ -74,6 +88,8 @@ public class ProfileActivity extends AppCompatActivity {
         txtName.setText(DriverInformation.get(1));
         txtPhone.setText(DriverInformation.get(2));
         Picasso.with(this).load(DriverInformation.get(3)).into(image);
+        otherUserID = getIntent().getStringExtra(StaticVariable.KEY_CHAT);
+        nip = getIntent().getStringExtra(StaticVariable.NIP_INFORMATION);
     }
 
     @Override

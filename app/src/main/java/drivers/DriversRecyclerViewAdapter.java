@@ -1,4 +1,4 @@
-package profile;
+package drivers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,7 +19,9 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import chat.ChatActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
+import profile.ProfileActivity;
 import users.FindDrivers;
 import users.StaticVariable;
 
@@ -47,11 +49,13 @@ public class DriversRecyclerViewAdapter extends RecyclerView.Adapter<DriversRecy
                             String photo = postSnapshot.child("profilURl").getValue().toString();
                             String phone = postSnapshot.child("phone").getValue().toString();
                             String id = postSnapshot.getKey();
+                            String nip = postSnapshot.child("nip").getValue().toString();
                             driver.setFirst_name(firstname);
                             driver.setLast_name(lastname);
                             driver.setProfilURl(photo);
                             driver.setId(id);
                             driver.setPhone(phone);
+                            driver.setNip(nip);
                             driversList.add(driver);
                         }
                     }
@@ -89,23 +93,31 @@ public class DriversRecyclerViewAdapter extends RecyclerView.Adapter<DriversRecy
                 driverInformation.add( driversList.get(i).getFirst_name() + " " + driversList.get(i).getLast_name());
                 driverInformation.add(driversList.get(i).getPhone());
                 driverInformation.add(driversList.get(i).getProfilURl());
+                String id = driversList.get(i).getId();
+                String nip=driversList.get(i).getNip();
                 Intent intent = new Intent(mContext, ProfileActivity.class);
                 intent.putExtra(StaticVariable.DRIVER_INFORMATION, driverInformation);
+                intent.putExtra(StaticVariable.KEY_FRIEND_ID, id);
+                intent.putExtra(StaticVariable.KEY_CHAT, id);
+                intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
                 mContext.startActivity(intent);
 
             }
         });
-        /*
+
         itemViewHolder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                //String id = friendsList.get(i).getId();
-                //Intent intent = new Intent(mContext, Chat.class);
-               // mContext.startActivity(intent);
+                String id = driversList.get(i).getId();
+                String nip=driversList.get(i).getNip();
+                Intent intent = new Intent(mContext, ChatActivity.class);
+                intent.putExtra(StaticVariable.KEY_CHAT, id);
+                intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
+                mContext.startActivity(intent);
                 return true;
             }
         });
-        */
+
     }
 
     @Override

@@ -31,16 +31,16 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import chat.ChatActivity;
+import chat.ChatListActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
+import drivers.DriversActivity;
 import users.StaticVariable;
 import users.employee;
 
+import static users.StaticVariable.CHAT_EMPLOYEE_ID_LIST;
 import static users.StaticVariable.DRIVERS_ID_LIST;
 import static users.StaticVariable.USER_INFORMATION;
-import static users.StaticVariable.NIP_INFORMATION;
-import static users.StaticVariable.POSITION_INFORMATION;
-
-
 
 
 public class CoursesManagerActivity extends AppCompatActivity {
@@ -71,6 +71,9 @@ public class CoursesManagerActivity extends AppCompatActivity {
     private TextView last_nameTextView;
     private Toolbar mToolbar;
     public ArrayList<String> UserInformation;
+    private ArrayList<String> driversIdList;
+    private ArrayList<String> chatEmployeeList;
+
 
 
 
@@ -83,6 +86,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
 
         UserInformation = new ArrayList<>();
 
+
         init();
 
         user = mAuth.getCurrentUser();
@@ -90,6 +94,10 @@ public class CoursesManagerActivity extends AppCompatActivity {
         mProgresDiaolog = new ProgressDialog(this);
 
 
+        driversIdList = new ArrayList<>();
+        chatEmployeeList = new ArrayList<>();
+        employeeIdFromDatabase();
+        chatEmployeeIdFromDatabase();
 
 
 
@@ -110,7 +118,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
         };
 
 
-        myRef = FirebaseDatabase.getInstance().getReference().child(nip+"/"+position+"/"+userID);
+        myRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/"+ userID);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -148,23 +156,31 @@ public class CoursesManagerActivity extends AppCompatActivity {
                     case R.id.navigation_dashboard:
                         Intent map = new Intent(CoursesManagerActivity.this, MapManagerActivity.class);
                         map.putExtra(USER_INFORMATION, UserInformation);
+                        map.putExtra(DRIVERS_ID_LIST, driversIdList);
+                        map.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         startActivity(map);
                         return true;
                     case R.id.navigation_notifications:
-                        Intent chat = new Intent(CoursesManagerActivity.this, ChatActivity.class);
+                        Intent chat = new Intent(CoursesManagerActivity.this, ChatListActivity.class);
                         chat.putExtra(USER_INFORMATION, UserInformation);
+                        chat.putExtra(DRIVERS_ID_LIST, driversIdList);
+                        chat.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         startActivity(chat);
                         return true;
 
                     case R.id.navigation_friends:
                         Intent drivers = new Intent(CoursesManagerActivity.this, DriversActivity.class);
                         drivers.putExtra(USER_INFORMATION, UserInformation);
+                        drivers.putExtra(DRIVERS_ID_LIST, driversIdList);
+                        drivers.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         startActivity(drivers);
                         return true;
 
                     case R.id.navigation_cars:
                         Intent cars = new Intent(CoursesManagerActivity.this, CarsManagerActivity.class);
                         cars.putExtra(USER_INFORMATION, UserInformation);
+                        cars.putExtra(DRIVERS_ID_LIST, driversIdList);
+                        cars.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         startActivity(cars);
                         return true;
 
@@ -302,11 +318,53 @@ public class CoursesManagerActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Uri downloadUri) {
                     String uploadId = downloadUri.toString();
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/"+position+"/").child(userID);
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Employee/").child(userID);
                     dR.child("profilURl").setValue(uploadId);
                 }
             });
         }
+    }
+
+    private void setDriversList(DataSnapshot dataSnapshot) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            if (ds.getKey()!=userID) {
+                driversIdList.add(ds.getKey());
+            }
+        }
+    }
+
+    private void employeeIdFromDatabase() {
+        DatabaseReference allEmployeeDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
+        allEmployeeDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setDriversList(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
+    }
+
+    private void setChatEmployeeListList(DataSnapshot dataSnapshot) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            chatEmployeeList.add(ds.getKey());
+        }
+    }
+    private void chatEmployeeIdFromDatabase() {
+        DatabaseReference allEmployeeDatabaseRef = FirebaseDatabase.getInstance().getReference(nip+"/Employee/"+userID+"/chat");
+        allEmployeeDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setChatEmployeeListList(dataSnapshot);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
     }
 
 

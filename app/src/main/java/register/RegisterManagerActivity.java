@@ -22,7 +22,6 @@ import daymos.lodz.uni.math.pl.mobilefleet.R;
 import login.LoginActivity;
 import users.employee;
 import users.firm;
-import users.manager;
 
 public class RegisterManagerActivity extends AppCompatActivity {
 
@@ -83,6 +82,7 @@ public class RegisterManagerActivity extends AppCompatActivity {
         final String nameFirm = editTextNameFirm.getText().toString().trim();
         final String adressFirm = editTextAdressFrim.getText().toString().trim();
         final String password  = editTextPassword.getText().toString().trim();
+        final String position = "Manager";
 
 
 
@@ -146,14 +146,14 @@ public class RegisterManagerActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
 
-                            manager manager = new manager(email,password ,phone,firstName,lastName,nip,"https://firebasestorage.googleapis.com/v0/b/raczejpiatek-77d73.appspot.com/o/585e4bf3cb11b227491c339a.png?alt=media&token=6b9c8923-a808-44f1-8e44-473b08e9c249");
+                            employee employee = new employee(email,password ,phone,firstName,lastName,"https://firebasestorage.googleapis.com/v0/b/raczejpiatek-77d73.appspot.com/o/585e4bf3cb11b227491c339a.png?alt=media&token=6b9c8923-a808-44f1-8e44-473b08e9c249",nip,position);
                             try {
-                                manager.setPassword(register.Security.encrypt(password));
+                                employee.setPassword(register.Security.encrypt(password));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            FirebaseDatabase.getInstance().getReference(nip).child("Manager")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(manager).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            FirebaseDatabase.getInstance().getReference(nip).child("Employee")
+                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(employee).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {

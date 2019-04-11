@@ -74,6 +74,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
         final String phone  = editTextPhone.getText().toString().trim();
         final String nip = editTextNIP.getText().toString().trim();
         final String password  = editTextPassword.getText().toString().trim();
+        final String position = "Employee";
 
 
         if(TextUtils.isEmpty(email)){
@@ -114,7 +115,7 @@ public class RegisterEmployeeActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
 
-                            employee employee = new employee(email,password ,phone,firstName,lastName,"https://firebasestorage.googleapis.com/v0/b/raczejpiatek-77d73.appspot.com/o/585e4bf3cb11b227491c339a.png?alt=media&token=6b9c8923-a808-44f1-8e44-473b08e9c249",nip);
+                            employee employee = new employee(email,password ,phone,firstName,lastName,"https://firebasestorage.googleapis.com/v0/b/raczejpiatek-77d73.appspot.com/o/585e4bf3cb11b227491c339a.png?alt=media&token=6b9c8923-a808-44f1-8e44-473b08e9c249",nip,position);
                             try {
                                 employee.setPassword(register.Security.encrypt(password));
                             } catch (Exception e) {

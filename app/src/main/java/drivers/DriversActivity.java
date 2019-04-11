@@ -1,4 +1,4 @@
-package profile;
+package drivers;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,10 +32,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import chat.ChatListActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
-import users.StaticVariable;
-import users.employee;
+import profile.CarsManagerActivity;
+import chat.ChatActivity;
+import profile.CoursesManagerActivity;
+import profile.MapManagerActivity;
 
+import static users.StaticVariable.CHAT_EMPLOYEE_ID_LIST;
+import static users.StaticVariable.DRIVERS_ID_LIST;
 import static users.StaticVariable.NIP_INFORMATION;
 import static users.StaticVariable.POSITION_INFORMATION;
 import static users.StaticVariable.USER_INFORMATION;
@@ -65,8 +69,11 @@ public class DriversActivity extends AppCompatActivity {
     private RecyclerView driverListRecyclerView;
     private DriversRecyclerViewAdapter driversRecyclerViewAdapter;
     private DatabaseReference userDatabaseRef;
+    private DatabaseReference userManagerRef;
+
 
     private ArrayList<String> driversIdList;
+    private ArrayList<String>  chatEmployeeList;
     private String nip;
     private String position;
 
@@ -79,6 +86,10 @@ public class DriversActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drivers);
+        driversIdList = new ArrayList<>();
+        chatEmployeeList= new ArrayList<>();
+
+
         init();
         loadUserInfo();
 
@@ -86,11 +97,6 @@ public class DriversActivity extends AppCompatActivity {
         user = mAuth.getCurrentUser();
         userID = user.getUid();
         mProgresDiaolog = new ProgressDialog(this);
-        driversIdList = new ArrayList<>();
-        driversIdFromDatabase();
-        managerIdFromDatabase();
-
-
 
 
 
@@ -102,13 +108,19 @@ public class DriversActivity extends AppCompatActivity {
             }
         });
 
-        userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/"+position+"/");
+        userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
+
 
         driversRecyclerViewAdapter = new DriversRecyclerViewAdapter(DriversActivity.this, userDatabaseRef,driversIdList);
         driverListRecyclerView.setLayoutManager( new LinearLayoutManager(this));
         driverListRecyclerView.setHasFixedSize(true);
         driverListRecyclerView.setAdapter(driversRecyclerViewAdapter);
         driversRecyclerViewAdapter.notifyDataSetChanged();
+
+
+
+
+
 
 
 
@@ -127,16 +139,23 @@ public class DriversActivity extends AppCompatActivity {
                         Intent course = new Intent(DriversActivity.this, CoursesManagerActivity.class);
                         course.putExtra(NIP_INFORMATION,nip);
                         course.putExtra(POSITION_INFORMATION,position);
+                        course.putExtra(DRIVERS_ID_LIST,driversIdList);
+                        course.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+
                         startActivity(course);
                         return true;
                     case R.id.navigation_dashboard:
                         Intent map = new Intent(DriversActivity.this, MapManagerActivity.class);
                         map.putExtra(USER_INFORMATION, UserInformation);
+                        map.putExtra(DRIVERS_ID_LIST,driversIdList);
+                        map.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         startActivity(map);
                         return true;
                     case R.id.navigation_notifications:
-                        Intent chat = new Intent(DriversActivity.this, ChatActivity.class);
+                        Intent chat = new Intent(DriversActivity.this, ChatListActivity.class);
                         chat.putExtra(USER_INFORMATION, UserInformation);
+                        chat.putExtra(DRIVERS_ID_LIST,driversIdList);
+                        chat.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         startActivity(chat);
                         return true;
 
@@ -146,6 +165,8 @@ public class DriversActivity extends AppCompatActivity {
                     case R.id.navigation_cars:
                         Intent cars = new Intent(DriversActivity.this, CarsManagerActivity.class);
                         cars.putExtra(USER_INFORMATION, UserInformation);
+                        cars.putExtra(DRIVERS_ID_LIST,driversIdList);
+                        cars.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         startActivity(cars);
                         return true;
 
@@ -173,13 +194,12 @@ public class DriversActivity extends AppCompatActivity {
         driverListRecyclerView=findViewById(R.id.driversRecyclerView);
         profilURL = findViewById(R.id.avatar);
 
-
-
-
     }
 
     private void loadUserInfo(){
         UserInformation =(ArrayList<String>)getIntent().getSerializableExtra(USER_INFORMATION);
+        driversIdList=(ArrayList<String>)getIntent().getSerializableExtra(DRIVERS_ID_LIST);
+        chatEmployeeList=(ArrayList<String>)getIntent().getSerializableExtra(CHAT_EMPLOYEE_ID_LIST);
         nip=UserInformation.get(0);
         position=UserInformation.get(1);
         first_nameTextView.setText(UserInformation.get(2));
@@ -242,7 +262,7 @@ public class DriversActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Uri downloadUri) {
                     String uploadId = downloadUri.toString();
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/"+position+"/").child(userID);
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Employee/").child(userID);
                     dR.child("profilURl").setValue(uploadId);
                 }
             });
@@ -250,46 +270,25 @@ public class DriversActivity extends AppCompatActivity {
     }
 
 
-    private void setDriversList(DataSnapshot dataSnapshot) {
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            if (ds.getKey()!=userID) {
-                driversIdList.add(ds.getKey());
-           }
-        }
-    }
-
-    private void driversIdFromDatabase() {
-        DatabaseReference allEmployeeDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/"+"Employee/");
-        allEmployeeDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setDriversList(dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-
-        });
-    }
-
-    private void managerIdFromDatabase() {
-        DatabaseReference allManagerDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/"+"Manager/");
-        allManagerDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setDriversList(dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-
-        });
-    }
-
         private void toastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        driversRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        driversRecyclerViewAdapter.notifyDataSetChanged();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        driversRecyclerViewAdapter.notifyDataSetChanged();
     }
 
 

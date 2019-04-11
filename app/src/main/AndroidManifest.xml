@@ -18,10 +18,11 @@
         android:roundIcon="@drawable/icon_truck"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="profile.ProfileActivity"></activity>
+        <activity android:name="chat.ChatListActivity"></activity>
+        <activity android:name="profile.ProfileActivity" />
         <activity android:name="profile.CarsManagerActivity" />
-        <activity android:name="profile.DriversActivity" />
-        <activity android:name="profile.ChatActivity" />
+        <activity android:name="drivers.DriversActivity" />
+        <activity android:name="chat.ChatActivity" />
         <activity android:name="profile.MapManagerActivity" />
 
         <uses-library
@@ -40,7 +41,5 @@
         <activity android:name="register.ChoiceRegisterActivity" />
         <activity android:name="register.RegisterManagerActivity" />
     </application>
-
-
 
 </manifest>

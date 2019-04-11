@@ -1,7 +1,7 @@
 package users;
 
 public class FindDrivers {
-    private String profilURl, first_name,last_name, id,phone;
+    private String profilURl, first_name,last_name, id,phone,nip;
     private boolean is_sharing;
 
 
@@ -22,12 +22,13 @@ public class FindDrivers {
         this.id=id;
     }
 
-    public FindDrivers(String profilURl, String first_name,String last_name, String id,String phone) {
+    public FindDrivers(String profilURl, String first_name,String last_name, String id,String phone,String nip ) {
         this.profilURl = profilURl;
         this.first_name = first_name;
         this.last_name = last_name;
         this.id=id;
         this.phone=phone;
+        this.nip=nip;
     }
 
 
@@ -89,4 +90,9 @@ public class FindDrivers {
     public void setIs_sharing(boolean is_sharing) {
         this.is_sharing = is_sharing;
     }
+
+    public String getNip(){return nip;}
+
+    public void setNip(String nip) {this.nip=nip;}
+
 }
