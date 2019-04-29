@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/icon_truck"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="profile.EditProfilInformationActivity"></activity>
+        <activity android:name="profile.LocationDriverOnMapActivity"></activity>
+        <activity android:name="profile.EditProfilInformationActivity" />
         <activity android:name="chat.ChatListActivity" />
         <activity android:name="profile.ProfileActivity" />
         <activity android:name="profile.CarsManagerActivity" />
@@ -41,6 +42,13 @@
         </activity>
         <activity android:name="register.ChoiceRegisterActivity" />
         <activity android:name="register.RegisterManagerActivity" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/map_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

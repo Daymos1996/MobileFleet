@@ -10,37 +10,25 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import chat.ChatActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 import login.LoginActivity;
-import users.FindDrivers;
 import users.StaticVariable;
 
 import static users.StaticVariable.DRIVER_INFORMATION;
-import static users.StaticVariable.NIP_INFORMATION;
-import static users.StaticVariable.USER_INFORMATION;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -78,6 +66,15 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
+                intent.putExtra(StaticVariable.KEY_CHAT, otherUserID);
+                intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
+                startActivity(intent);
+            }
+        });
+        map.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ProfileActivity.this, LocationDriverOnMapActivity.class);
                 intent.putExtra(StaticVariable.KEY_CHAT, otherUserID);
                 intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
                 startActivity(intent);
