@@ -43,11 +43,26 @@ public class FindDrivers {
     }
 
 
+    public FindDrivers(String id, String first_name,String last_name,String phone, String profilURl) {
+        this.id = id;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.phone = phone;
+        this.profilURl = profilURl;
+    }
+
     public FindDrivers(String profilURl, String first_name,String last_name,String id, boolean is_sharing) {
         this.profilURl = profilURl;
         this.first_name = first_name;
         this.last_name = last_name;
         this.id = id;
+        this.is_sharing = is_sharing;
+    }
+
+    public FindDrivers(String profilURl, String first_name,String last_name, boolean is_sharing) {
+        this.profilURl = profilURl;
+        this.first_name = first_name;
+        this.last_name = last_name;
         this.is_sharing = is_sharing;
     }
 

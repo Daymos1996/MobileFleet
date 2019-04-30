@@ -114,6 +114,7 @@ public class MapManagerActivity extends FragmentActivity implements
     private ArrayList<String> UserInformation;
     private ArrayList<String> driversIdList;
     private ArrayList<String>  chatEmployeeList;
+    private ArrayList<String> DriverInformation;
 
     private String nip;
 
@@ -134,6 +135,7 @@ public class MapManagerActivity extends FragmentActivity implements
 
         driversIdList=new ArrayList<>();
         chatEmployeeList=new ArrayList<>();
+        DriverInformation=new ArrayList<>();
 
         init();
         loadUserInfo();
@@ -311,15 +313,18 @@ public class MapManagerActivity extends FragmentActivity implements
 
             buildGoogleApiClient();
             mMap.setMyLocationEnabled(true);
-
         }
-        mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                String id = marker.getSnippet();
-                showActionsDialog(id);
-            }
-        });
+
+
+            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    String id = marker.getSnippet();
+
+                    showActionsDialog(id);
+                }
+            });
+
     }
 
 
@@ -388,8 +393,14 @@ public class MapManagerActivity extends FragmentActivity implements
 
         shareLocation();
 
+
+
         for (int i = 0; i < driversIdList.size(); i++) {
+            if(driversIdList.get(i).equals(userID)){
+                driversIdList.remove(i);
+            }
             setLocationFriendsInMap(driversIdList.get(i));
+
         }
 
         MarkerOptions markerOptions = new MarkerOptions();
@@ -447,8 +458,8 @@ public class MapManagerActivity extends FragmentActivity implements
 
 
     private void setLocationFriendsInMap(String userID) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        reference = database.getReference().child(userID);
+        //FirebaseDatabase database = FirebaseDatabase.getInstance();
+        reference = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/"+userID);
         readData(new FirebaseCallback() {
 
             @Override
@@ -495,8 +506,9 @@ public class MapManagerActivity extends FragmentActivity implements
         String lastname = dataSnapshot.child("last_name").getValue(String.class);
         String profilURl = dataSnapshot.child("profilURl").getValue(String.class);
         String sharing = dataSnapshot.child("is_sharing").getValue(String.class);
+
         boolean is_sharing = Boolean.parseBoolean(sharing);
-        FindDrivers driver = new FindDrivers(profilURl, name,lastname, id, is_sharing);
+        FindDrivers driver = new FindDrivers(profilURl, name,lastname,id, is_sharing);
 
         return driver;
     }
@@ -510,8 +522,7 @@ public class MapManagerActivity extends FragmentActivity implements
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                 currentFriendLocationMarker = mMap.addMarker(new MarkerOptions()
                         .position(latLng).icon(BitmapDescriptorFactory.fromBitmap(bitmap))
-                        .snippet(f.getId())
-                        .title(f.getFirst_name())
+                        .title(f.getFirst_name()+" "+f.getLast_name())
                 );
 
             }
@@ -551,42 +562,77 @@ public class MapManagerActivity extends FragmentActivity implements
 
 
     private void showActionsDialog(final String id) {
-        CharSequence colors[] = new CharSequence[]{"Wyświetl profil", "Rozpocznij czat"};
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == 0) {
-                    //  Toast.makeText(MapsActivity.this, id, Toast.LENGTH_SHORT).show();
-                    showProfil(id);
-                } else {
-                    showChat(id);
+            CharSequence colors[] = new CharSequence[]{"Wyświetl profil", "Rozpocznij czat"};
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setItems(colors, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (which == 0) {
+                        //  Toast.makeText(MapsActivity.this, id, Toast.LENGTH_SHORT).show();
+                        showProfil(id);
+                    } else {
+                        showChat(id);
+
+                    }
                 }
-            }
-        });
-        builder.show();
+            });
+            builder.show();
+
+
     }
 
 
     private void showProfil(String id) {
-        Intent intent = new Intent(MapManagerActivity.this, ProfileActivity.class);
-        intent.putExtra(StaticVariable.KEY_FRIEND_ID, id);
-        startActivity(intent);
+        myRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/"+ id);
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DriverInformation(dataSnapshot);
+                Intent intent = new Intent(MapManagerActivity.this, ProfileActivity.class);
+                intent.putExtra(StaticVariable.DRIVER_INFORMATION, DriverInformation);
+                intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     private void showChat(String id) {
         Intent intent = new Intent(MapManagerActivity.this, ChatActivity.class);
         intent.putExtra(StaticVariable.KEY_CHAT, id);
+        intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
         startActivity(intent);
+    }
+
+    public void DriverInformation(DataSnapshot dataSnapshot) {
+        String id = dataSnapshot.getKey();
+        String name = dataSnapshot.child("first_name").getValue(String.class);
+        String lastname = dataSnapshot.child("last_name").getValue(String.class);
+        String phone = dataSnapshot.child("phone").getValue(String.class);
+        String profilURl = dataSnapshot.child("profilURl").getValue(String.class);
+        String fullname= name +" " +lastname;
+        DriverInformation.add(id);
+        DriverInformation.add(fullname);
+        DriverInformation.add(phone);
+        DriverInformation.add(profilURl);
+
     }
 
 
     @Override
     protected void onDestroy() {
-        reference.child(user.getUid()).child("is_sharing").setValue("false")
+
+        myRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee");
+        myRef.child(user.getUid()).child("is_sharing").setValue("false")
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

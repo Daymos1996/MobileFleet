@@ -322,9 +322,10 @@ public class CoursesManagerActivity extends AppCompatActivity {
 
     private void setDriversList(DataSnapshot dataSnapshot) {
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            if (ds.getKey()!=userID) {
+            if (!ds.getKey().equals(userID)) {
                 driversIdList.add(ds.getKey());
             }
+
         }
     }
 

@@ -44,6 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
     private CircleImageView chat;
     private String nip;
     private String otherUserID;
+    private String driverID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, ChatActivity.class);
-                intent.putExtra(StaticVariable.KEY_CHAT, otherUserID);
+                intent.putExtra(StaticVariable.KEY_CHAT, driverID);
                 intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
                 startActivity(intent);
             }
@@ -75,7 +76,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProfileActivity.this, LocationDriverOnMapActivity.class);
-                intent.putExtra(StaticVariable.KEY_CHAT, otherUserID);
+                intent.putExtra(StaticVariable.KEY_CHAT, driverID);
                 intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
                 startActivity(intent);
             }
@@ -122,11 +123,12 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
     private void loadUserInfo(){
+
         DriverInformation =(ArrayList<String>)getIntent().getSerializableExtra(DRIVER_INFORMATION);
+        driverID=DriverInformation.get(0);
         txtName.setText(DriverInformation.get(1));
         txtPhone.setText(DriverInformation.get(2));
         Picasso.with(this).load(DriverInformation.get(3)).into(image);
-        otherUserID = getIntent().getStringExtra(StaticVariable.KEY_CHAT);
         nip = getIntent().getStringExtra(StaticVariable.NIP_INFORMATION);
     }
 
