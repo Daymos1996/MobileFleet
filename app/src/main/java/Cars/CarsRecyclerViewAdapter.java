@@ -35,7 +35,7 @@ public class CarsRecyclerViewAdapter extends RecyclerView.Adapter<CarsRecyclerVi
     private DatabaseReference mRef;
 
 
-    public CarsRecyclerViewAdapter(Context mContext, DatabaseReference ref, final ArrayList<String> carsIdList) {
+    public CarsRecyclerViewAdapter(Context mContext, DatabaseReference ref, final ArrayList<String> carsIdList, final String nip) {
         this.mContext = mContext;
         this.mRef = ref;
         mRef.addValueEventListener(new ValueEventListener() {
@@ -68,6 +68,7 @@ public class CarsRecyclerViewAdapter extends RecyclerView.Adapter<CarsRecyclerVi
                             cars.setYearProduction(yearProduction);
                             cars.setTechnicalExamination(technicalExamination);
                             cars.setOc(oc);
+                            cars.setNip(nip);
 
                             carsList.add(cars);
                         }
@@ -113,6 +114,7 @@ public class CarsRecyclerViewAdapter extends RecyclerView.Adapter<CarsRecyclerVi
                 carInformation.add(carsList.get(i).getYearProduction());
                 carInformation.add(carsList.get(i).getTechnicalExamination()) ;
                 carInformation.add(carsList.get(i).getOc());
+                carInformation.add(carsList.get(i).getNip());
 
                 // String id = driversList.get(i).getId();
                 // String nip=driversList.get(i).getNip();

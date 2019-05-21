@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/layout_background"
     android:orientation="vertical"
-    android:gravity="center_horizontal"
     tools:context="profile.ProfileActivity">
 
 
@@ -15,90 +14,104 @@
         android:id="@+id/image"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="right"
         android:src="@drawable/ic_account_box_black_24dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:gravity="center">
 
 
         <TextView
             android:id="@+id/editCarBrand"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:hint="Car Brand"
+            android:layout_marginTop="-150dp"
+            android:layout_marginLeft="32dp"
+            android:drawablePadding="5dp"
             android:textColor="#00222d"
+            android:textSize="22dp"
             android:fontFamily="casual"
             android:textStyle="bold"
             android:background="#00000000"
             android:drawableLeft="@drawable/truck" />
 
+    <TextView
+        android:id="@+id/editYearOfProduction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_date_range_black_24dp"
+        android:drawablePadding="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:textColor="#00222d"
+        android:textSize="22dp"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:hint="Year of production" />
+
 
         <TextView
             android:id="@+id/editRegistrationNumber"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:paddingLeft="20dp"
+            android:layout_height="wrap_content"
             android:drawableLeft="@drawable/plate"
             android:drawablePadding="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="32dp"
             android:hint="Registration number"
             android:textColor="#00222d"
+            android:textSize="22dp"
             android:fontFamily="casual"
             android:textStyle="bold"
             android:background="#00000000" />
 
 
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center">
 
-        <TextView
-            android:id="@+id/editVinNumber"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:drawableLeft="@drawable/vin"
-            android:drawablePadding="5dp"
-            android:textColor="#00222d"
-            android:fontFamily="casual"
-            android:textStyle="bold"
-            android:background="#00000000"
-            android:hint="Vin number" />
 
         <TextView
             android:id="@+id/editCarMileage"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:drawableLeft="@drawable/distance"
             android:drawablePadding="5dp"
-            android:paddingLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="32dp"
             android:textColor="#00222d"
+            android:textSize="22dp"
             android:fontFamily="casual"
             android:textStyle="bold"
             android:background="#00000000"
             android:hint="Car mileage" />
 
-    </LinearLayout>
+    <TextView
+        android:id="@+id/editVinNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/vin"
+        android:drawablePadding="5dp"
+        android:textColor="#00222d"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:textSize="22dp"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:hint="Vin number" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center">
+
 
         <TextView
             android:id="@+id/editEngineCapacity"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:drawableLeft="@drawable/engine"
             android:drawablePadding="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="32dp"
             android:textColor="#00222d"
             android:fontFamily="casual"
+            android:textSize="22dp"
             android:textStyle="bold"
             android:background="#00000000"
             android:hint="Engine Capacity"
@@ -107,60 +120,48 @@
         <TextView
             android:id="@+id/editMotorPower"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:drawableLeft="@drawable/engine"
             android:drawablePadding="5dp"
-            android:paddingLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="32dp"
             android:textColor="#00222d"
+            android:textSize="22dp"
             android:fontFamily="casual"
             android:textStyle="bold"
             android:background="#00000000"
             android:hint="Motor Power" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="20dp"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/editYearOfProduction"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:drawableLeft="@drawable/ic_date_range_black_24dp"
-            android:drawablePadding="5dp"
-            android:textColor="#00222d"
-            android:fontFamily="casual"
-            android:textStyle="bold"
-            android:background="#00000000"
-            android:hint="Year of production" />
 
         <TextView
             android:id="@+id/editTermOfTechnicalExamination"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_date_range_black_24dp"
-            android:paddingLeft="20dp"
             android:drawablePadding="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="32dp"
             android:textColor="#00222d"
+            android:textSize="22dp"
             android:fontFamily="casual"
             android:textStyle="bold"
             android:background="#00000000"
             android:hint="Technical examination" />
-    </LinearLayout>
 
         <TextView
             android:id="@+id/edtiTermOC"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_date_range_black_24dp"
-            android:paddingLeft="20dp"
             android:drawablePadding="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="32dp"
             android:textColor="#00222d"
+            android:textSize="22dp"
             android:fontFamily="casual"
             android:textStyle="bold"
             android:background="#00000000"
+            android:hint="OC/AC"
             />
 
 
@@ -169,12 +170,13 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_delete_forever_red_900_24dp"
-        android:layout_marginTop="40dp"
+        android:drawablePadding="5dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginLeft="32dp"
         android:textStyle="bold"
         android:textSize="25dp"
         android:textColor="#B71C1C"
-        android:text="Delete car"
-        android:gravity="center" />
+        android:text="Delete car" />
 
 
 

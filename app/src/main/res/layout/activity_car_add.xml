@@ -120,7 +120,7 @@
         android:gravity="center"
         android:hint="Engine Capacity"
         android:ems="8"
-        android:inputType="number" />
+        android:inputType="date" />
 
     <EditText
         android:id="@+id/editMotorPower"
@@ -154,7 +154,7 @@
         android:gravity="center"
         android:hint="Year of production"
         android:ems="8"
-        android:inputType="number" />
+        android:inputType="date" />
 
     <EditText
         android:id="@+id/editTermOfTechnicalExamination"

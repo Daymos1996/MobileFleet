@@ -1,7 +1,7 @@
 package users;
 
 public class FindCars {
-    private String carUrl, carBrand ,plateNumber, vinNumber,carMileage,engineCapacity,motorPower,yearProduction,technicalExamination ,oc;
+    private String carUrl, carBrand ,plateNumber, vinNumber,carMileage,engineCapacity,motorPower,yearProduction,technicalExamination ,oc,nip;
 
     public FindCars(){
 
@@ -15,7 +15,7 @@ public class FindCars {
     }
 
     public FindCars(String carUrl,String carBrand,String plateNumber,String vinNumber,String carMileage,String engineCapacity,
-                    String motorPower,String yearProduction,String technicalExamination,String oc){
+                    String motorPower,String yearProduction,String technicalExamination,String oc,String nip){
 
         this.carUrl= carUrl;
         this.carBrand=carBrand;
@@ -27,10 +27,11 @@ public class FindCars {
         this.yearProduction=yearProduction;
         this.technicalExamination=technicalExamination;
         this.oc=oc;
+        this.nip=nip;
     }
 
     public FindCars(String carBrand,String plateNumber,String vinNumber,String carMileage,String engineCapacity,
-                    String motorPower,String yearProduction,String technicalExamination,String oc){
+                    String motorPower,String yearProduction,String technicalExamination,String oc,String nip){
 
         this.carBrand=carBrand;
         this.plateNumber=plateNumber;
@@ -41,6 +42,7 @@ public class FindCars {
         this.yearProduction=yearProduction;
         this.technicalExamination=technicalExamination;
         this.oc=oc;
+        this.nip=nip;
     }
 
     public String getCarUrl() {
@@ -80,6 +82,9 @@ public class FindCars {
 
     public String getOc() {return oc;}
     public void setOc(String oc) {this.oc=oc;}
+
+    public String getNip() {return  nip;}
+    public void setNip(String nip) {this.nip=nip;}
 
 
 

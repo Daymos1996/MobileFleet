@@ -106,7 +106,7 @@ public class CarsManagerActivity extends AppCompatActivity {
         if(!carsList.isEmpty()) {
             userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Cars");
 
-            carsRecyclerViewAdapter = new CarsRecyclerViewAdapter(CarsManagerActivity.this, userDatabaseRef, carsList);
+            carsRecyclerViewAdapter = new CarsRecyclerViewAdapter(CarsManagerActivity.this, userDatabaseRef, carsList,nip);
             carsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             carsListRecyclerView.setHasFixedSize(true);
             carsListRecyclerView.setAdapter(carsRecyclerViewAdapter);

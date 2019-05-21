@@ -163,7 +163,7 @@ public class CarAddActivity extends AppCompatActivity {
         progressDialog.show();
 
         FindCars car = new FindCars("https://firebasestorage.googleapis.com/v0/b/mobilefleet-547ef.appspot.com/o/truck.png?alt=media&token=b6565e1c-c14b-410e-bb64-6c98c1d2429a",carBrandd,plateNumberr,vinNumberr,carMileagee,engineCapacityy,
-                motorPowerr,yearProductionn,technicalExaminationn,termOCC);
+                motorPowerr,yearProductionn,technicalExaminationn,termOCC,nip);
 
         FirebaseDatabase.getInstance().getReference(nip+"/Cars/"+plateNumberr).setValue(car).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -171,6 +171,7 @@ public class CarAddActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     Toast.makeText(CarAddActivity.this,"Successful add car",Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(CarAddActivity.this, CoursesManagerActivity.class);
+                    intent.putExtra(NIP_INFORMATION,nip);
                     startActivity(intent);
                 } else {
                     Toast.makeText(CarAddActivity.this,"Error during add car",Toast.LENGTH_LONG).show();
