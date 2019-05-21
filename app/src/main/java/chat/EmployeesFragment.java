@@ -31,6 +31,7 @@ import drivers.DriversRecyclerViewAdapter;
 import login.LoginActivity;
 import users.StaticVariable;
 
+import static users.StaticVariable.CARS_ID_LIST;
 import static users.StaticVariable.DRIVERS_ID_LIST;
 import static users.StaticVariable.USER_INFORMATION;
 
@@ -49,6 +50,7 @@ public class EmployeesFragment extends Fragment {
     private DatabaseReference userDatabaseRef;
     private ArrayList<String> UserInformation;
     private ArrayList<String> driversIdList;
+    private ArrayList<String> carsList;
     private DriversRecyclerViewAdapter driversRecyclerViewAdapter;
     private View mMainView;
     private String nip;
@@ -74,6 +76,7 @@ public class EmployeesFragment extends Fragment {
 
         driversIdList=new ArrayList<>();
         UserInformation=new ArrayList<>();
+        carsList=new ArrayList<>();
         init();
         loadUserInfo();
 
@@ -102,6 +105,7 @@ public class EmployeesFragment extends Fragment {
     private void loadUserInfo(){
         UserInformation =(ArrayList<String>)getActivity().getIntent().getSerializableExtra(USER_INFORMATION);
         driversIdList=(ArrayList<String>)getActivity().getIntent().getSerializableExtra(DRIVERS_ID_LIST);
+        carsList =(ArrayList<String>)getActivity().getIntent().getSerializableExtra(CARS_ID_LIST);
         nip=UserInformation.get(0);
         position=UserInformation.get(1);
 

@@ -2,7 +2,6 @@ package profile;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,14 +10,10 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -26,14 +21,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import chat.ChatActivity;
+import Cars.CarsManagerActivity;
 import chat.ChatListActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import drivers.DriversActivity;
@@ -41,9 +33,9 @@ import login.LoginActivity;
 import users.StaticVariable;
 import users.employee;
 
+import static users.StaticVariable.CARS_ID_LIST;
 import static users.StaticVariable.CHAT_EMPLOYEE_ID_LIST;
 import static users.StaticVariable.DRIVERS_ID_LIST;
-import static users.StaticVariable.NIP_INFORMATION;
 import static users.StaticVariable.USER_INFORMATION;
 
 
@@ -76,6 +68,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
     public ArrayList<String> UserInformation;
     private ArrayList<String> driversIdList;
     private ArrayList<String> chatEmployeeList;
+    private ArrayList<String> carsList;
 
 
 
@@ -101,10 +94,10 @@ public class CoursesManagerActivity extends AppCompatActivity {
 
         driversIdList = new ArrayList<>();
         chatEmployeeList = new ArrayList<>();
+        carsList = new ArrayList<>();
         employeeIdFromDatabase();
         chatEmployeeIdFromDatabase();
-
-
+        carIdFromDateBase();
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -155,6 +148,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
                         map.putExtra(USER_INFORMATION, UserInformation);
                         map.putExtra(DRIVERS_ID_LIST, driversIdList);
                         map.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        map.putExtra(CARS_ID_LIST,carsList);
                         startActivity(map);
                         return true;
                     case R.id.navigation_notifications:
@@ -162,6 +156,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
                         chat.putExtra(USER_INFORMATION, UserInformation);
                         chat.putExtra(DRIVERS_ID_LIST, driversIdList);
                         chat.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        chat.putExtra(CARS_ID_LIST,carsList);
                         startActivity(chat);
                         return true;
 
@@ -170,6 +165,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
                         drivers.putExtra(USER_INFORMATION, UserInformation);
                         drivers.putExtra(DRIVERS_ID_LIST, driversIdList);
                         drivers.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        drivers.putExtra(CARS_ID_LIST,carsList);
                         startActivity(drivers);
                         return true;
 
@@ -178,6 +174,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
                         cars.putExtra(USER_INFORMATION, UserInformation);
                         cars.putExtra(DRIVERS_ID_LIST, driversIdList);
                         cars.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        cars.putExtra(CARS_ID_LIST,carsList);
                         startActivity(cars);
                         return true;
 
@@ -356,6 +353,27 @@ public class CoursesManagerActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 setChatEmployeeListList(dataSnapshot);
             }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
+    }
+
+    private void setCarsList(DataSnapshot dataSnapshot) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            carsList.add(ds.getKey());
+        }
+    }
+
+    private void carIdFromDateBase() {
+        DatabaseReference allCarDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Cars");
+        allCarDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setCarsList(dataSnapshot);
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }

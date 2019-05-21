@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/layout_background"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="Cars.CarAddActivity">
+
+
+
+    <ImageView
+        android:id="@+id/carUrl"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/ic_photo_black_24dp"
+        />
+
+    <TextView
+        android:id="@+id/textUserInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:textColor="#ba0101"
+        android:textSize="20dp"
+        android:fontFamily="casual"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:text="Give the Car informarion "
+        />
+
+    <EditText
+        android:id="@+id/editCarBrand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:ems="8"
+        android:hint="Car Brand"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:drawableLeft="@drawable/truck"
+        android:gravity="center"
+        android:inputType="textPersonName" />
+
+
+    <EditText
+        android:id="@+id/editRegistrationNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/plate"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:hint="Registration number"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:ems="8"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editVinNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/vin"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:hint="Vin number"
+        android:ems="8"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editCarMileage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/distance"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:hint="Car mileage"
+        android:ems="8"
+        android:inputType="number" />
+
+
+
+
+    <EditText
+        android:id="@+id/editEngineCapacity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/engine"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:hint="Engine Capacity"
+        android:ems="8"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editMotorPower"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/engine"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:hint="Motor Power"
+        android:ems="8"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editYearOfProduction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_date_range_black_24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:hint="Year of production"
+        android:ems="8"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/editTermOfTechnicalExamination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_date_range_black_24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:hint="Technical examination"
+        android:ems="8"
+        android:inputType="date" />
+
+    <EditText
+        android:id="@+id/edtiTermOC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_date_range_black_24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:hint="Validity date OC/AC"
+        android:ems="8"
+        android:inputType="date" />
+
+    <Button
+        android:id="@+id/buttonAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:textSize="30dp"
+        android:textColor="#2A3c58"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:text="Add car" />
+
+
+
+</LinearLayout>

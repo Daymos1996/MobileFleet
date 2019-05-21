@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,13 +17,11 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +41,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -55,12 +51,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
+import Cars.CarsManagerActivity;
 import chat.ChatActivity;
 import chat.ChatListActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
@@ -70,11 +66,11 @@ import users.BubbleTransformation;
 import users.FindDrivers;
 import users.StaticVariable;
 
+import static users.StaticVariable.CARS_ID_LIST;
 import static users.StaticVariable.CHAT_EMPLOYEE_ID_LIST;
 import static users.StaticVariable.DRIVERS_ID_LIST;
 import static users.StaticVariable.NIP_INFORMATION;
 import static users.StaticVariable.USER_INFORMATION;
-import static users.StaticVariable.REQUEST_USER_LOCATION_CODE;
 
 public class MapManagerActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -115,6 +111,7 @@ public class MapManagerActivity extends FragmentActivity implements
     private ArrayList<String> driversIdList;
     private ArrayList<String>  chatEmployeeList;
     private ArrayList<String> DriverInformation;
+    private ArrayList<String> carsList;
 
     private String nip;
 
@@ -136,6 +133,7 @@ public class MapManagerActivity extends FragmentActivity implements
         driversIdList=new ArrayList<>();
         chatEmployeeList=new ArrayList<>();
         DriverInformation=new ArrayList<>();
+        carsList=new ArrayList<>();
 
         init();
         loadUserInfo();
@@ -178,6 +176,7 @@ public class MapManagerActivity extends FragmentActivity implements
                         course.putExtra(NIP_INFORMATION,nip);
                         course.putExtra(DRIVERS_ID_LIST,driversIdList);
                         course.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        course.putExtra(CARS_ID_LIST,carsList);
                         startActivity(course);
                         return true;
                     case R.id.navigation_dashboard:
@@ -187,6 +186,7 @@ public class MapManagerActivity extends FragmentActivity implements
                         chat.putExtra(USER_INFORMATION, UserInformation);
                         chat.putExtra(DRIVERS_ID_LIST,driversIdList);
                         chat.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        chat.putExtra(CARS_ID_LIST,carsList);
                         startActivity(chat);
                         return true;
 
@@ -195,6 +195,7 @@ public class MapManagerActivity extends FragmentActivity implements
                         drivers.putExtra(USER_INFORMATION, UserInformation);
                         drivers.putExtra(DRIVERS_ID_LIST,driversIdList);
                         drivers.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        drivers.putExtra(CARS_ID_LIST,carsList);
                         startActivity(drivers);
                         return true;
 
@@ -203,6 +204,7 @@ public class MapManagerActivity extends FragmentActivity implements
                         cars.putExtra(USER_INFORMATION, UserInformation);
                         cars.putExtra(DRIVERS_ID_LIST,driversIdList);
                         cars.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        cars.putExtra(CARS_ID_LIST,carsList);
                         startActivity(cars);
                         return true;
                 }
@@ -260,6 +262,8 @@ public class MapManagerActivity extends FragmentActivity implements
         UserInformation =(ArrayList<String>)getIntent().getSerializableExtra(USER_INFORMATION);
         driversIdList =(ArrayList<String>)getIntent().getSerializableExtra(DRIVERS_ID_LIST);
         chatEmployeeList =(ArrayList<String>)getIntent().getSerializableExtra(CHAT_EMPLOYEE_ID_LIST);
+        carsList =(ArrayList<String>)getIntent().getSerializableExtra(CARS_ID_LIST);
+
 
         nip=UserInformation.get(0);
         first_nameTextView.setText(UserInformation.get(1));
