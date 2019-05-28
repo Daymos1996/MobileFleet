@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/layout_background"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/driversRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center">>
+
+    </android.support.v7.widget.RecyclerView>
+
+    <at.markushi.ui.CircleButton
+        android:id="@+id/add"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginLeft="270dp"
+        android:src="@drawable/ic_add_white_24dp"
+        android:visibility="visible"
+        app:cb_color="#008577"
+        app:cb_pressedRingWidth="8dip" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

@@ -1,10 +1,13 @@
-package profile;
+package courses;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,13 +26,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import Cars.CarsManagerActivity;
 import chat.ChatListActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import drivers.DriversActivity;
 import login.LoginActivity;
+import profile.EditProfilInformationActivity;
+import profile.MapManagerActivity;
 import users.StaticVariable;
 import users.employee;
 
@@ -60,6 +67,9 @@ public class CoursesManagerActivity extends AppCompatActivity {
     private String ProfilURL;
     private String nip;
 
+    private ViewPager mViewPager;
+    private CoursesSectionsPagerAdapter mSectionsPagerAdapter;
+    private TabLayout mTabLayout;
 
 
     private ImageView profilURL;
@@ -69,6 +79,9 @@ public class CoursesManagerActivity extends AppCompatActivity {
     private ArrayList<String> driversIdList;
     private ArrayList<String> chatEmployeeList;
     private ArrayList<String> carsList;
+    private ArrayList<String> todayCourses;
+    private ArrayList<String> HistoryUserCourses;
+
 
 
 
@@ -81,9 +94,16 @@ public class CoursesManagerActivity extends AppCompatActivity {
         mToolbar = (Toolbar) findViewById(R.id.main_page_toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle("");
+        mViewPager = (ViewPager) findViewById(R.id.main_tabPager);
+        mSectionsPagerAdapter = new CoursesSectionsPagerAdapter(getSupportFragmentManager());
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        mTabLayout = (TabLayout) findViewById(R.id.main_tabs);
+        mTabLayout.setupWithViewPager(mViewPager);
+
+
 
         UserInformation = new ArrayList<>();
-
 
         init();
 
@@ -95,9 +115,13 @@ public class CoursesManagerActivity extends AppCompatActivity {
         driversIdList = new ArrayList<>();
         chatEmployeeList = new ArrayList<>();
         carsList = new ArrayList<>();
+        todayCourses = new ArrayList<>();
+        HistoryUserCourses = new ArrayList<>();
+
         employeeIdFromDatabase();
         chatEmployeeIdFromDatabase();
         carIdFromDateBase();
+        todayUserIdCourse();
 
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -190,6 +214,14 @@ public class CoursesManagerActivity extends AppCompatActivity {
 
     }
 
+    public ArrayList<String> getUserInformation() {
+        return UserInformation;
+    }
+    public ArrayList<String> getCarsListInformation(){return carsList;}
+    public ArrayList<String> getTodayCourses(){return todayCourses;}
+    public ArrayList<String> getHistoryUserCourses(){return todayCourses;}
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -219,35 +251,8 @@ public class CoursesManagerActivity extends AppCompatActivity {
         return true;
     }
 
-    /*
-    public void deleteUser(String userID) {
-
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        DatabaseReference userData = FirebaseDatabase.getInstance().getReference(nip+"/Employee/").child(userID);
-
-        userData.removeValue()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User account deleted.");
-                        }
-                    }
-                });
 
 
-        user.delete()
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d(TAG, "User account deleted.");
-                        }
-                    }
-                });
-
-    }
-*/
     private void showUserInformation(DataSnapshot ds) {
         employee uInfo = new employee();
         if (ds.child("first_name").exists()) {
@@ -382,6 +387,35 @@ public class CoursesManagerActivity extends AppCompatActivity {
     }
 
 
+    private void setTodayUserList(DataSnapshot dataSnapshot) {
+        String actualyTime = new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime());
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            HistoryUserCourses.add(ds.getKey());
+            if (ds.child("/courseTime/").getValue().equals(actualyTime)) {
+                todayCourses.add(ds.getKey());
+            }
+        }
+    }
+
+    private void todayUserIdCourse() {
+        DatabaseReference allTodaysCourses = FirebaseDatabase.getInstance().getReference().child(nip+"/Courses/")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        allTodaysCourses.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setTodayUserList(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
+    }
+
+
+
+
     private void toastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
@@ -405,6 +439,8 @@ public class CoursesManagerActivity extends AppCompatActivity {
         });
 
     }
+
+
 
     @Override
     protected void onResume() {

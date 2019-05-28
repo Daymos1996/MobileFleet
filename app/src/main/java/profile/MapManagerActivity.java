@@ -59,6 +59,7 @@ import java.util.ArrayList;
 import Cars.CarsManagerActivity;
 import chat.ChatActivity;
 import chat.ChatListActivity;
+import courses.CoursesManagerActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import drivers.DriversActivity;
 import login.LoginActivity;

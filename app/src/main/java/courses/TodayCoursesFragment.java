@@ -1,10 +1,14 @@
-package chat;
+package courses;
 
-
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,22 +23,25 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
+import Cars.CarAddActivity;
+import Cars.CarsManagerActivity;
+import at.markushi.ui.CircleButton;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import drivers.DriversRecyclerViewAdapter;
-import login.LoginActivity;
 import users.StaticVariable;
 
 import static users.StaticVariable.CARS_ID_LIST;
 import static users.StaticVariable.DRIVERS_ID_LIST;
 import static users.StaticVariable.USER_INFORMATION;
 
-public class EmployeesFragment extends Fragment {
 
+public class TodayCoursesFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     FirebaseUser user;
@@ -47,39 +54,50 @@ public class EmployeesFragment extends Fragment {
 
     private DatabaseReference userDatabaseRef;
     private ArrayList<String> UserInformation;
-    private ArrayList<String> driversIdList;
+    private ArrayList<String> todayCourses;
     private ArrayList<String> carsList;
     private DriversRecyclerViewAdapter driversRecyclerViewAdapter;
     private View mMainView;
     private String nip;
     private String position;
     private String userID;
+    private CircleButton add;
 
 
 
-
-
-
-    public EmployeesFragment() {
-
+    public TodayCoursesFragment() {
     }
+
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        mMainView = inflater.inflate(R.layout.fragment_employees, container, false);
+
+        mMainView = inflater.inflate(R.layout.fragment_today_courses, container, false);
+
+
         driverListRecyclerView= (RecyclerView) mMainView.findViewById(R.id.driversRecyclerView);
 
-        driversIdList=new ArrayList<>();
-        UserInformation=new ArrayList<>();
+
+        todayCourses=new ArrayList<>();
         carsList=new ArrayList<>();
+        UserInformation = new ArrayList<>();
+
         init();
-        loadUserInfo();
 
 
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), AddCourseActivity.class);
+                intent.putExtra(StaticVariable.USER_INFORMATION,UserInformation);
+                intent.putExtra(StaticVariable.CARS_ID_LIST,carsList);
+                startActivity(intent);
+            }
+        });
 
+        /*
         if(driversIdList != null && (!driversIdList.isEmpty())) {
             userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
 
@@ -90,44 +108,24 @@ public class EmployeesFragment extends Fragment {
             driversRecyclerViewAdapter.notifyDataSetChanged();
 
         }
-
+    */
         return  mMainView;
     }
 
     private void init() {
-        first_nameTextView = mMainView.findViewById(R.id.txtFirstName);
-        last_nameTextView = mMainView.findViewById(R.id.txtLastName);
-        profilURL = mMainView.findViewById(R.id.avatar);
+
+        add = mMainView.findViewById(R.id.add);
+
+        CoursesManagerActivity activity = (CoursesManagerActivity) getActivity();
+        UserInformation = activity.getUserInformation();
+        carsList = activity.getCarsListInformation();
+        todayCourses=activity.getTodayCourses();
+
+
+
     }
-
-    private void loadUserInfo(){
-        UserInformation =(ArrayList<String>)getActivity().getIntent().getSerializableExtra(USER_INFORMATION);
-        driversIdList=(ArrayList<String>)getActivity().getIntent().getSerializableExtra(DRIVERS_ID_LIST);
-        carsList =(ArrayList<String>)getActivity().getIntent().getSerializableExtra(CARS_ID_LIST);
-        nip=UserInformation.get(0);
-
+    private void toastMessage(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
-
-
-
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        //  friendsRecyclerViewAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //friendsRecyclerViewAdapter.notifyDataSetChanged();
-    }
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // friendsRecyclerViewAdapter.notifyDataSetChanged();
-    }
-
 
 }

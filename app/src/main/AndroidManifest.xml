@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/icon_truck"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="Cars.CarInformationActivity"></activity>
+        <activity android:name="courses.AddCourseActivity"></activity>
+        <activity android:name="Cars.CarInformationActivity" />
         <activity android:name="Cars.CarAddActivity" />
         <activity android:name="profile.LocationDriverOnMapActivity" />
         <activity android:name="profile.EditProfilInformationActivity" />
@@ -33,7 +34,7 @@
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name="profile.CoursesManagerActivity" />
+        <activity android:name="courses.CoursesManagerActivity" />
         <activity android:name="register.RegisterEmployeeActivity" />
         <activity android:name="login.LoginActivity">
             <intent-filter>

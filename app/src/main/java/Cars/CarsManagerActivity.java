@@ -18,11 +18,8 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -30,16 +27,13 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import at.markushi.ui.CircleButton;
-import chat.ChatActivity;
 import chat.ChatListActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import drivers.DriversActivity;
-import drivers.DriversRecyclerViewAdapter;
 import login.LoginActivity;
-import profile.CoursesManagerActivity;
+import courses.CoursesManagerActivity;
 import profile.EditProfilInformationActivity;
 import profile.MapManagerActivity;
-import profile.ProfileActivity;
 import users.StaticVariable;
 
 import static users.StaticVariable.CARS_ID_LIST;

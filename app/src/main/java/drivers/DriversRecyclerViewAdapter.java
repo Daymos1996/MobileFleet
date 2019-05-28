@@ -90,7 +90,7 @@ public class DriversRecyclerViewAdapter extends RecyclerView.Adapter<DriversRecy
             @Override
             public void onClick(View v) {
                 driverInformation.add(driversList.get(i).getId());
-                driverInformation.add( driversList.get(i).getFirst_name() + " " + driversList.get(i).getLast_name());
+                driverInformation.add(driversList.get(i).getFirst_name() + " " + driversList.get(i).getLast_name());
                 driverInformation.add(driversList.get(i).getPhone());
                 driverInformation.add(driversList.get(i).getProfilURl());
                 String id = driversList.get(i).getId();

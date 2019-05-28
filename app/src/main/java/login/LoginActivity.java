@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,12 +19,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
 import daymos.lodz.uni.math.pl.mobilefleet.R;
-import profile.CoursesManagerActivity;
+import courses.CoursesManagerActivity;
 import register.ChoiceRegisterActivity;
-import register.RegisterEmployeeActivity;
-import register.RegisterManagerActivity;
+
 import static users.StaticVariable.NIP_INFORMATION;
-import static users.StaticVariable.POSITION_INFORMATION;
 
 
 public class LoginActivity extends AppCompatActivity {

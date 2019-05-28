@@ -29,7 +29,7 @@ import daymos.lodz.uni.math.pl.mobilefleet.R;
 import drivers.DriversActivity;
 import login.LoginActivity;
 import Cars.CarsManagerActivity;
-import profile.CoursesManagerActivity;
+import courses.CoursesManagerActivity;
 import profile.EditProfilInformationActivity;
 import profile.MapManagerActivity;
 

@@ -8,12 +8,9 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,15 +32,10 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import courses.CoursesManagerActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
-import de.hdodenhof.circleimageview.CircleImageView;
-import login.LoginActivity;
 import register.Security;
-import users.StaticVariable;
 
-import static users.StaticVariable.CHAT_EMPLOYEE_ID_LIST;
-import static users.StaticVariable.DRIVERS_ID_LIST;
-import static users.StaticVariable.DRIVER_INFORMATION;
 import static users.StaticVariable.NIP_INFORMATION;
 import static users.StaticVariable.USER_INFORMATION;
 

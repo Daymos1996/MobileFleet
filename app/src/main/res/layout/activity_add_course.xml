@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/layout_background"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="Cars.CarAddActivity">
+
+
+
+    <ImageView
+        android:id="@+id/course"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/distance2"
+        />
+
+    <TextView
+        android:id="@+id/textCourseInformation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="40dp"
+        android:textColor="#ba0101"
+        android:textSize="20dp"
+        android:fontFamily="casual"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:clickable="true"
+        android:text="Give the course informarion "
+        />
+
+    <EditText
+        android:id="@+id/fromWhere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:ems="8"
+        android:hint="From where"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:drawableLeft="@drawable/ic_room_black_24dp"
+        android:gravity="center"
+        android:inputType="text" />
+
+
+    <EditText
+        android:id="@+id/toWhere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_room_black_24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:hint="To where"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:ems="8"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/distance"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:hint="Distance"
+        android:ems="8"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/numberOfPallets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/paleta"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:hint="Number of pallets"
+        android:ems="8"
+        android:inputType="number" />
+
+    <EditText
+        android:id="@+id/plateNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/plate"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:hint="Car plate number"
+        android:ems="8"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/cost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/money"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:hint="Invoice amount"
+        android:ems="8"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/numberInvoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/invoice"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:textColor="#00222d"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:background="#00000000"
+        android:gravity="center"
+        android:hint="Invoice number"
+        android:ems="8"
+        android:inputType="text" />
+
+
+
+    <Button
+        android:id="@+id/buttonAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_background"
+        android:textSize="30dp"
+        android:textColor="#2A3c58"
+        android:fontFamily="casual"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:text="Add Course" />
+
+
+
+</LinearLayout>

@@ -1,11 +1,14 @@
-package chat;
+package courses;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-class SectionsPagerAdapter extends FragmentPagerAdapter {
-    public SectionsPagerAdapter(FragmentManager fm) {
+import chat.EmployeesFragment;
+import chat.ListMessageFromEmployessFragment;
+
+public class CoursesSectionsPagerAdapter extends FragmentPagerAdapter {
+    public CoursesSectionsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -13,12 +16,12 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch(position){
             case 0:
-                ListMessageFromEmployessFragment listMessageFromEmployessFragment = new ListMessageFromEmployessFragment();
-                return listMessageFromEmployessFragment;
+                TodayCoursesFragment todayCoursesFragment = new TodayCoursesFragment();
+                return todayCoursesFragment;
 
             case 1:
-                EmployeesFragment employeesFragment = new EmployeesFragment();
-                return employeesFragment;
+                HistoryCoursesFragment historyCoursesFragment = new HistoryCoursesFragment();
+                return historyCoursesFragment;
 
             default:
                 return null;
@@ -30,17 +33,17 @@ class SectionsPagerAdapter extends FragmentPagerAdapter {
     public int getCount() {
         return 2;
     }
-
     public CharSequence getPageTitle(int position){
         switch (position){
             case 0:
-                return "Messages";
+                return "Today Courses";
 
             case 1:
-                return "Employees";
+                return "History";
 
             default:
                 return null;
         }
     }
+
 }

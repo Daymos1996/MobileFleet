@@ -3,7 +3,6 @@ package Cars;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -33,12 +32,10 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import daymos.lodz.uni.math.pl.mobilefleet.R;
-import profile.CoursesManagerActivity;
-import profile.EditProfilInformationActivity;
+import courses.CoursesManagerActivity;
 
 import static users.StaticVariable.CAR_INFORMATION;
 import static users.StaticVariable.NIP_INFORMATION;
-import static users.StaticVariable.USER_INFORMATION;
 
 public class CarInformationActivity extends AppCompatActivity {
 
