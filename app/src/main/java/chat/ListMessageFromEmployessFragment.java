@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -63,6 +64,8 @@ public class ListMessageFromEmployessFragment extends Fragment {
 
         chatFriendsIdList = (ArrayList<String>) getActivity().getIntent().getSerializableExtra(StaticVariable.CHAT_EMPLOYEE_ID_LIST);
 
+        toastMessage(String.valueOf(chatFriendsIdList.size()));
+
         if(!chatFriendsIdList.isEmpty()) {
             userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
 
@@ -110,5 +113,8 @@ public class ListMessageFromEmployessFragment extends Fragment {
 
 
 
+    private void toastMessage(String message) {
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+    }
 
 }

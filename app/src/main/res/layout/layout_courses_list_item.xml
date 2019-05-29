@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_margin="5dp"
+    android:layout_height="165dp"
+    android:orientation="horizontal"
+    android:id="@+id/parent_layout">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:text="Full name"
+            android:drawableLeft="@drawable/ic_account_box_black_24dp"
+            android:drawablePadding="10dp"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+
+        <TextView
+           android:id="@+id/courseTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@drawable/ic_date_range_black_24dp"
+            android:drawablePadding="10dp"
+            android:text="Course"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/fromWhere"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:drawableLeft="@drawable/ic_room_black_24dp"
+        android:drawablePadding="10dp"
+        android:text="From where"
+        android:textSize="12dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/toWhere"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="55dp"
+        android:layout_marginLeft="10dp"
+        android:drawableLeft="@drawable/ic_room_black_24dp"
+        android:drawablePadding="10dp"
+        android:text="to where"
+        android:textSize="12dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/plateNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="85dp"
+        android:layout_marginLeft="10dp"
+        android:drawableLeft="@drawable/truck"
+        android:drawablePadding="10dp"
+        android:text="plate number"
+        android:textSize="12dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/invoiceNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="115dp"
+            android:text="invoiceNumber"
+            android:drawableLeft="@drawable/invoice"
+            android:drawablePadding="10dp"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/cost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="115dp"
+            android:drawableLeft="@drawable/money"
+            android:drawablePadding="10dp"
+            android:text="cost"
+            android:textSize="12dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+
+</RelativeLayout>

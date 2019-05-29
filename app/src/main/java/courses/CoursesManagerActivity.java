@@ -123,7 +123,6 @@ public class CoursesManagerActivity extends AppCompatActivity {
         carIdFromDateBase();
         todayUserIdCourse();
 
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth mAuth) {
@@ -214,7 +213,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
 
     }
 
-    public ArrayList<String> getUserInformation() {
+    public ArrayList<String> getMyUserInformation() {
         return UserInformation;
     }
     public ArrayList<String> getCarsListInformation(){return carsList;}
@@ -387,7 +386,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
     }
 
 
-    private void setTodayUserList(DataSnapshot dataSnapshot) {
+    public void setTodayUserList(DataSnapshot dataSnapshot) {
         String actualyTime = new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime());
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
             HistoryUserCourses.add(ds.getKey());
@@ -395,9 +394,10 @@ public class CoursesManagerActivity extends AppCompatActivity {
                 todayCourses.add(ds.getKey());
             }
         }
+
     }
 
-    private void todayUserIdCourse() {
+    public void todayUserIdCourse() {
         DatabaseReference allTodaysCourses = FirebaseDatabase.getInstance().getReference().child(nip+"/Courses/")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
         allTodaysCourses.addListenerForSingleValueEvent(new ValueEventListener() {

@@ -43,15 +43,13 @@ public class courses {
         return courseTime;
     }
 
-    public String getFromWhere() { return fromWhere; }
+    public String getFromWhere() { return this.fromWhere; }
 
     public void setFromWhere(String fromWhere) {
         this.fromWhere = fromWhere;
     }
 
-    public String getToWhere() {
-        return toWhere;
-    }
+    public String getToWhere() { return toWhere; }
 
     public void setToWhere(String toWhere) {
         this.toWhere = toWhere;

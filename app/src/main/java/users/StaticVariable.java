@@ -12,6 +12,8 @@ public class StaticVariable {
     public static final String CHAT_TABLE = "chat";
     public static final String KEY_CHAT = "KEY_CHAT";
     public static final String CHAT_EMPLOYEE_ID_LIST = "CHAT_EMPLOYEE_ID_LIST";
+    public static final String COURSE_INFORMATION = "COURSE_INFORMATION";
+
     public static final int REQUEST_USER_LOCATION_CODE = 99;
 
 }

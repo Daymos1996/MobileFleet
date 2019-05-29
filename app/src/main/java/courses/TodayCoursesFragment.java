@@ -45,18 +45,15 @@ public class TodayCoursesFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     FirebaseUser user;
-    private ImageView profilURL;
-    private TextView first_nameTextView;
-    private TextView last_nameTextView;
 
-    private RecyclerView driverListRecyclerView;
+    private RecyclerView CoursesRecyclerView;
+    private CoursesRecyclerViewAdapter coursesRecyclerViewAdapter;
 
 
     private DatabaseReference userDatabaseRef;
     private ArrayList<String> UserInformation;
     private ArrayList<String> todayCourses;
     private ArrayList<String> carsList;
-    private DriversRecyclerViewAdapter driversRecyclerViewAdapter;
     private View mMainView;
     private String nip;
     private String position;
@@ -77,14 +74,13 @@ public class TodayCoursesFragment extends Fragment {
         mMainView = inflater.inflate(R.layout.fragment_today_courses, container, false);
 
 
-        driverListRecyclerView= (RecyclerView) mMainView.findViewById(R.id.driversRecyclerView);
-
-
         todayCourses=new ArrayList<>();
         carsList=new ArrayList<>();
         UserInformation = new ArrayList<>();
 
         init();
+
+        todayUserIdCourse();
 
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -97,33 +93,68 @@ public class TodayCoursesFragment extends Fragment {
             }
         });
 
-        /*
-        if(driversIdList != null && (!driversIdList.isEmpty())) {
-            userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
 
-            driversRecyclerViewAdapter = new DriversRecyclerViewAdapter(getActivity().getBaseContext(), userDatabaseRef, driversIdList);
-            driverListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
-            driverListRecyclerView.setHasFixedSize(true);
-            driverListRecyclerView.setAdapter(driversRecyclerViewAdapter);
-            driversRecyclerViewAdapter.notifyDataSetChanged();
 
-        }
-    */
+
         return  mMainView;
     }
 
     private void init() {
 
         add = mMainView.findViewById(R.id.add);
+        CoursesRecyclerView= (RecyclerView) mMainView.findViewById(R.id.coursesRecyclerView);
 
         CoursesManagerActivity activity = (CoursesManagerActivity) getActivity();
-        UserInformation = activity.getUserInformation();
+        UserInformation = activity.getMyUserInformation();
         carsList = activity.getCarsListInformation();
-        todayCourses=activity.getTodayCourses();
-
-
+        nip=UserInformation.get(0);
 
     }
+
+    private void setTodayUserList(DataSnapshot dataSnapshot) {
+        String actualyTime = new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime());
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+          //  HistoryUserCourses.add(ds.getKey());
+            if (ds.child("/courseTime/").getValue().equals(actualyTime)) {
+                todayCourses.add(ds.getKey());
+            }
+        }
+        RecyclerViewLoad();
+    }
+
+    private void todayUserIdCourse() {
+        DatabaseReference allTodaysCourses = FirebaseDatabase.getInstance().getReference().child(nip+"/Courses/")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        allTodaysCourses.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setTodayUserList(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
+    }
+
+    private void RecyclerViewLoad(){
+        if(todayCourses != null && (!todayCourses.isEmpty())) {
+            userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Courses/")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+
+            coursesRecyclerViewAdapter = new CoursesRecyclerViewAdapter(getActivity().getBaseContext(), userDatabaseRef, todayCourses);
+            CoursesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
+            CoursesRecyclerView.setHasFixedSize(true);
+            CoursesRecyclerView.setAdapter(coursesRecyclerViewAdapter);
+            coursesRecyclerViewAdapter.notifyDataSetChanged();
+
+        }
+
+    }
+
+
     private void toastMessage(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }

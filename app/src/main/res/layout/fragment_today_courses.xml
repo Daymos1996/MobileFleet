@@ -21,13 +21,15 @@
         app:layout_constraintVertical_bias="0.0">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/driversRecyclerView"
+        android:id="@+id/coursesRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:layout_marginTop="20dp"
         android:layout_gravity="center">>
 
     </android.support.v7.widget.RecyclerView>
+
+
 
     <at.markushi.ui.CircleButton
         android:id="@+id/add"
