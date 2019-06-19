@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,11 +25,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 
-import Cars.CarsManagerActivity;
+import cars.CarsManagerActivity;
 import chat.ChatListActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import drivers.DriversActivity;
@@ -43,6 +40,8 @@ import users.employee;
 import static users.StaticVariable.CARS_ID_LIST;
 import static users.StaticVariable.CHAT_EMPLOYEE_ID_LIST;
 import static users.StaticVariable.DRIVERS_ID_LIST;
+import static users.StaticVariable.NIP_INFORMATION;
+import static users.StaticVariable.POSITION;
 import static users.StaticVariable.USER_INFORMATION;
 
 
@@ -66,6 +65,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
     private String LastName;
     private String ProfilURL;
     private String nip;
+    private String position;
 
     private ViewPager mViewPager;
     private CoursesSectionsPagerAdapter mSectionsPagerAdapter;
@@ -76,11 +76,6 @@ public class CoursesManagerActivity extends AppCompatActivity {
     private TextView first_nameTextView;
     private TextView last_nameTextView;
     public ArrayList<String> UserInformation;
-    private ArrayList<String> driversIdList;
-    private ArrayList<String> chatEmployeeList;
-    private ArrayList<String> carsList;
-    private ArrayList<String> todayCourses;
-    private ArrayList<String> HistoryUserCourses;
 
 
 
@@ -112,16 +107,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
         mProgresDiaolog = new ProgressDialog(this);
 
 
-        driversIdList = new ArrayList<>();
-        chatEmployeeList = new ArrayList<>();
-        carsList = new ArrayList<>();
-        todayCourses = new ArrayList<>();
-        HistoryUserCourses = new ArrayList<>();
 
-        employeeIdFromDatabase();
-        chatEmployeeIdFromDatabase();
-        carIdFromDateBase();
-        todayUserIdCourse();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -144,6 +130,8 @@ public class CoursesManagerActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 showUserInformation(dataSnapshot);
+
+
             }
 
             @Override
@@ -169,35 +157,31 @@ public class CoursesManagerActivity extends AppCompatActivity {
                     case R.id.navigation_dashboard:
                         Intent map = new Intent(CoursesManagerActivity.this, MapManagerActivity.class);
                         map.putExtra(USER_INFORMATION, UserInformation);
-                        map.putExtra(DRIVERS_ID_LIST, driversIdList);
-                        map.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        map.putExtra(CARS_ID_LIST,carsList);
+                        map.putExtra(NIP_INFORMATION,nip);
+                        map.putExtra(POSITION,position);
                         startActivity(map);
                         return true;
                     case R.id.navigation_notifications:
                         Intent chat = new Intent(CoursesManagerActivity.this, ChatListActivity.class);
                         chat.putExtra(USER_INFORMATION, UserInformation);
-                        chat.putExtra(DRIVERS_ID_LIST, driversIdList);
-                        chat.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        chat.putExtra(CARS_ID_LIST,carsList);
+                        chat.putExtra(NIP_INFORMATION,nip);
+                        chat.putExtra(POSITION,position);
                         startActivity(chat);
                         return true;
 
                     case R.id.navigation_friends:
                         Intent drivers = new Intent(CoursesManagerActivity.this, DriversActivity.class);
                         drivers.putExtra(USER_INFORMATION, UserInformation);
-                        drivers.putExtra(DRIVERS_ID_LIST, driversIdList);
-                        drivers.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        drivers.putExtra(CARS_ID_LIST,carsList);
+                        drivers.putExtra(NIP_INFORMATION,nip);
+                        drivers.putExtra(POSITION,position);
                         startActivity(drivers);
                         return true;
 
                     case R.id.navigation_cars:
                         Intent cars = new Intent(CoursesManagerActivity.this, CarsManagerActivity.class);
                         cars.putExtra(USER_INFORMATION, UserInformation);
-                        cars.putExtra(DRIVERS_ID_LIST, driversIdList);
-                        cars.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        cars.putExtra(CARS_ID_LIST,carsList);
+                        cars.putExtra(NIP_INFORMATION,nip);
+                        cars.putExtra(POSITION,position);
                         startActivity(cars);
                         return true;
 
@@ -216,9 +200,7 @@ public class CoursesManagerActivity extends AppCompatActivity {
     public ArrayList<String> getMyUserInformation() {
         return UserInformation;
     }
-    public ArrayList<String> getCarsListInformation(){return carsList;}
-    public ArrayList<String> getTodayCourses(){return todayCourses;}
-    public ArrayList<String> getHistoryUserCourses(){return todayCourses;}
+
 
 
     @Override
@@ -270,12 +252,11 @@ public class CoursesManagerActivity extends AppCompatActivity {
         if (ds.child("email").exists()) {
             uInfo.setEmail(ds.child("email").getValue().toString());
         }
+        if (ds.child("position").exists()){
+            uInfo.setPosition(ds.child("position").getValue().toString());
+        }
 
 
-        //display all the information
-        Log.d(TAG, "showData: name: " + uInfo.getFirst_name());
-        Log.d(TAG, "showData: name: " + uInfo.getLast_name());
-        Log.d(TAG, "showData: profile: " + uInfo.getProfilURl());
 
 
 
@@ -305,6 +286,8 @@ public class CoursesManagerActivity extends AppCompatActivity {
         }
         UserInformation.add(uInfo.getEmail());
         UserInformation.add(uInfo.getPhone());
+        UserInformation.add(uInfo.getPosition());
+
     }
 
     private void init() {
@@ -321,97 +304,8 @@ public class CoursesManagerActivity extends AppCompatActivity {
 
     }
 
-    private void setDriversList(DataSnapshot dataSnapshot) {
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            if (!ds.getKey().equals(userID)) {
-                driversIdList.add(ds.getKey());
-            }
-
-        }
-    }
-
-    private void employeeIdFromDatabase() {
-        DatabaseReference allEmployeeDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
-        allEmployeeDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setDriversList(dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-
-        });
-    }
-
-    private void setChatEmployeeListList(DataSnapshot dataSnapshot) {
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            chatEmployeeList.add(ds.getKey());
-        }
-    }
-    private void chatEmployeeIdFromDatabase() {
-        DatabaseReference allEmployeeDatabaseRef = FirebaseDatabase.getInstance().getReference(nip+"/Employee/"+userID+"/chat");
-        allEmployeeDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setChatEmployeeListList(dataSnapshot);
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-
-        });
-    }
-
-    private void setCarsList(DataSnapshot dataSnapshot) {
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            carsList.add(ds.getKey());
-        }
-    }
-
-    private void carIdFromDateBase() {
-        DatabaseReference allCarDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Cars");
-        allCarDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setCarsList(dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-
-        });
-    }
 
 
-    public void setTodayUserList(DataSnapshot dataSnapshot) {
-        String actualyTime = new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime());
-        for (DataSnapshot ds : dataSnapshot.getChildren()) {
-            HistoryUserCourses.add(ds.getKey());
-            if (ds.child("/courseTime/").getValue().equals(actualyTime)) {
-                todayCourses.add(ds.getKey());
-            }
-        }
-
-    }
-
-    public void todayUserIdCourse() {
-        DatabaseReference allTodaysCourses = FirebaseDatabase.getInstance().getReference().child(nip+"/Courses/")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        allTodaysCourses.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setTodayUserList(dataSnapshot);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-
-        });
-    }
 
 
 

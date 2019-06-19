@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/layout_background"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    tools:context="profile.ProfileActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/main_page_toolbar"
+            layout="@layout/app_bar_profile_layout" />
+
+
+    </android.support.design.widget.AppBarLayout>
+
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="40dp"
+        android:src="@drawable/distance2"/>
+
+
+    <TextView
+        android:id="@+id/txtName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:text="First name and Last Name"
+        android:gravity="center"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/plateNumber"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"
+            android:textSize="22dp"
+            android:text="plate number"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/courseTime"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"
+            android:textSize="22dp"
+            android:text="courseTime"
+            android:gravity="center" />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/fromWhere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginTop="40dp"
+        android:textSize="18dp"
+        android:text="fromWhere"
+        android:drawableLeft="@drawable/ic_room_black_24dp"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+         />
+
+    <TextView
+        android:id="@+id/toWhere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:text="toWhere"
+        android:drawableLeft="@drawable/ic_room_black_24dp"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:text="distance"
+        android:drawableLeft="@drawable/distance"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/numberOfPallets"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:text="numberOfPallets"
+        android:drawableLeft="@drawable/paleta"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/cost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:text="cost"
+        android:drawableLeft="@drawable/money"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:id="@+id/numberInvoice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        android:textSize="18dp"
+        android:text="numberInvoice"
+        android:drawableLeft="@drawable/invoice"
+        android:drawablePadding="10dp"
+        android:gravity="center"
+        />
+
+
+    <TextView
+        android:id="@+id/txtDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_delete_forever_red_900_24dp"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="50dp"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:textColor="#B71C1C"
+        android:text="Delete course" />
+
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+

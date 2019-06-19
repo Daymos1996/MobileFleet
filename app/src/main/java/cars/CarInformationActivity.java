@@ -1,4 +1,4 @@
-package Cars;
+package cars;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -33,9 +33,11 @@ import java.util.ArrayList;
 
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import courses.CoursesManagerActivity;
+import users.StaticVariable;
 
 import static users.StaticVariable.CAR_INFORMATION;
 import static users.StaticVariable.NIP_INFORMATION;
+import static users.StaticVariable.USER_INFORMATION;
 
 public class CarInformationActivity extends AppCompatActivity {
 
@@ -59,6 +61,7 @@ public class CarInformationActivity extends AppCompatActivity {
     private ProgressDialog mProgresDiaolog;
     private String nip;
     private String plate;
+    private ArrayList<String> UserInformation;
 
     private static final String TAG = "ViewDatabase";
     public static final int PICK_IMAGE = 1;
@@ -69,6 +72,7 @@ public class CarInformationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_car_information);
         mProgresDiaolog = new ProgressDialog(this);
 
+        UserInformation = new ArrayList<>();
         init();
         loadCarInformation();
 
@@ -141,17 +145,7 @@ public class CarInformationActivity extends AppCompatActivity {
             }
         });
 
-        /*
-        plateNumber.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                UpdatePlateNumber(plate);
-                plate=plateNumber.getText().toString();
-                toastMessage(plate);
-                return false;
-            }
-        });
-        */
+
 
 
     }
@@ -174,11 +168,13 @@ public class CarInformationActivity extends AppCompatActivity {
 
 
         txtDelete=findViewById(R.id.txtDelete);
+        //txtDelete.setVisibility(View.INVISIBLE);
 
 
     }
     private void loadCarInformation(){
         carInformation =(ArrayList<String>)getIntent().getSerializableExtra(CAR_INFORMATION);
+        UserInformation=(ArrayList<String>)getIntent().getSerializableExtra(USER_INFORMATION);
         Picasso.with(this).load(carInformation.get(0)).into(image);
         carBrand.setText(carInformation.get(1));
         plateNumber.setText(carInformation.get(2));
@@ -201,7 +197,7 @@ public class CarInformationActivity extends AppCompatActivity {
 
     public void deleteCar(String plate) {
 
-        DatabaseReference carData = FirebaseDatabase.getInstance().getReference(nip+"/Cars/").child(plate);
+        DatabaseReference carData = FirebaseDatabase.getInstance().getReference(nip+ "/cars/").child(plate);
 
         carData.removeValue()
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -229,28 +225,7 @@ public class CarInformationActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             final Uri mImageProfileUri = data.getData();
-            /*
-            CropImage.activity(imagePath)
-                    .setGuidelines(CropImageView.Guidelines.ON_TOUCH)
-                    .setAspectRatio(1, 1)
-                    .start(ProfilActivity.this);
-        }
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
 
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode==RESULT_OK) {
-                mImageProfileUri = result.getUri();
-
-                Picasso.with(this).load(mImageProfileUri).into(profilURL);
-            }
-            else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
-                Exception error = result.getError();
-            }
-            */
-
-            // DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Users").child(userID);
-            // dR.child("profilURl").setValue(mImageProfileUri);
-            // toastMessage("Username update");
 
             mProgresDiaolog.setMessage("Uploading...");
             mProgresDiaolog.show();
@@ -271,7 +246,7 @@ public class CarInformationActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Uri downloadUri) {
                     String uploadId = downloadUri.toString();
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Cars/"+plate);
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+ "/cars/" +plate);
                     dR.child("carUrl").setValue(uploadId);
 
                 }
@@ -295,7 +270,7 @@ public class CarInformationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String name = editTextName.getText().toString().trim();
                 if (!TextUtils.isEmpty(name)) {
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Cars/"+plate);
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+ "/cars/" +plate);
                     dR.child("carBrand").setValue(name);
                     toastMessage("Car brand update");
                     b.dismiss();
@@ -307,36 +282,7 @@ public class CarInformationActivity extends AppCompatActivity {
         return true;
     }
 
-    /*
-    private boolean UpdatePlateNumber(final String plate) {
-        //getting the specified artist reference
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        final View dialogView = inflater.inflate(R.layout.update_data, null);
-        dialogBuilder.setView(dialogView);
-        final EditText editTextName = (EditText) dialogView.findViewById(R.id.editTextName);
-        final Button buttonUpdate = (Button) dialogView.findViewById(R.id.buttonUpdateArtist);
-        final AlertDialog b = dialogBuilder.create();
-        b.show();
-
-        buttonUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String name = editTextName.getText().toString().trim();
-                if (!TextUtils.isEmpty(name)) {
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Cars/"+plate);
-                    dR.child("plateNumber").setValue(name);
-                    toastMessage("Plate number update");
-                    b.dismiss();
-                    plateNumber.setText(name);
-                }
-            }
-        });
-
-        return true;
-    }
-    */
     private boolean UpdateCarMileage(final String plate) {
 
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
@@ -353,7 +299,7 @@ public class CarInformationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String name = editTextName.getText().toString().trim();
                 if (!TextUtils.isEmpty(name)) {
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Cars/"+plate);
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+ "/cars/" +plate);
                     dR.child("carMileage").setValue(name);
                     toastMessage("Car mileage update");
                     b.dismiss();
@@ -381,7 +327,7 @@ public class CarInformationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String name = editTextName.getText().toString().trim();
                 if (!TextUtils.isEmpty(name)) {
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Cars/"+plate);
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+ "/cars/" +plate);
                     dR.child("oc").setValue(name);
                     toastMessage("Term oc/ac update");
                     b.dismiss();
@@ -410,7 +356,7 @@ public class CarInformationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String name = editTextName.getText().toString().trim();
                 if (!TextUtils.isEmpty(name)) {
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Cars/"+plate);
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+ "/cars/" +plate);
                     dR.child("technicalExamination").setValue(name);
                     toastMessage("Term technical examination update");
                     b.dismiss();
@@ -439,7 +385,7 @@ public class CarInformationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String name = editTextName.getText().toString().trim();
                 if (!TextUtils.isEmpty(name)) {
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Cars/"+plate);
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+ "/cars/" +plate);
                     dR.child("engineCapacity").setValue(name);
                     toastMessage("Engine Capacity update");
                     b.dismiss();
@@ -467,7 +413,7 @@ public class CarInformationActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String name = editTextName.getText().toString().trim();
                 if (!TextUtils.isEmpty(name)) {
-                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+"/Cars/"+plate);
+                    DatabaseReference dR = FirebaseDatabase.getInstance().getReference(nip+ "/cars/" +plate);
                     dR.child("motorPower").setValue(name);
                     toastMessage("Motor power update");
                     b.dismiss();
@@ -477,6 +423,15 @@ public class CarInformationActivity extends AppCompatActivity {
         });
 
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent intent = new Intent(this, CarsManagerActivity.class);
+        intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
+        intent.putExtra(StaticVariable.USER_INFORMATION,UserInformation);
+        startActivity(intent);;
     }
 
 

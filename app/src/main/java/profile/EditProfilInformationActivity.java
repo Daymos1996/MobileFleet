@@ -361,7 +361,6 @@ public class EditProfilInformationActivity extends AppCompatActivity {
     private void openFileChooser() {
         Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
-        // intent.setAction(Intent.ACTION_PICK);
         startActivityForResult(intent, PICK_IMAGE);
     }
 
@@ -372,28 +371,6 @@ public class EditProfilInformationActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             final Uri mImageProfileUri = data.getData();
-            /*
-            CropImage.activity(imagePath)
-                    .setGuidelines(CropImageView.Guidelines.ON_TOUCH)
-                    .setAspectRatio(1, 1)
-                    .start(ProfilActivity.this);
-        }
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
-
-            CropImage.ActivityResult result = CropImage.getActivityResult(data);
-            if(resultCode==RESULT_OK) {
-                mImageProfileUri = result.getUri();
-
-                Picasso.with(this).load(mImageProfileUri).into(profilURL);
-            }
-            else if(resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE){
-                Exception error = result.getError();
-            }
-            */
-
-            // DatabaseReference dR = FirebaseDatabase.getInstance().getReference("Users").child(userID);
-            // dR.child("profilURl").setValue(mImageProfileUri);
-            // toastMessage("Username update");
 
             mProgresDiaolog.setMessage("Uploading...");
             mProgresDiaolog.show();

@@ -27,11 +27,14 @@ public class CoursesRecyclerViewAdapter extends RecyclerView.Adapter<CoursesRecy
     private ArrayList<String> courseInformation = new ArrayList<>();
     private Context mContext;
     private DatabaseReference mRef;
+    private String nip;
 
 
-    public CoursesRecyclerViewAdapter(Context mContext, DatabaseReference ref, final ArrayList<String> coursesIdArrayList) {
+    public CoursesRecyclerViewAdapter(Context mContext, DatabaseReference ref, final ArrayList<String> coursesIdArrayList, String nip) {
         this.mContext = mContext;
         this.mRef = ref;
+        this.nip=nip;
+
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -109,9 +112,10 @@ public class CoursesRecyclerViewAdapter extends RecyclerView.Adapter<CoursesRecy
                 courseInformation.add(coursesList.get(i).getNumberOfPallets());
                 courseInformation.add(coursesList.get(i).getCost());
                 courseInformation.add(coursesList.get(i).getNumberInvoice());
+                courseInformation.add(nip);
 
 
-                Intent intent = new Intent(mContext, ChatActivity.class);
+                Intent intent = new Intent(mContext, CourseInformationActivity.class);
                 intent.putExtra(StaticVariable.COURSE_INFORMATION, courseInformation);
                 mContext.startActivity(intent);
 

@@ -1,4 +1,4 @@
-package Cars;
+package cars;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -18,8 +18,11 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
@@ -68,7 +71,7 @@ public class CarsManagerActivity extends AppCompatActivity {
     private String nip;
 
     private RecyclerView carsListRecyclerView;
-    private Cars.CarsRecyclerViewAdapter carsRecyclerViewAdapter;
+    private cars.CarsRecyclerViewAdapter carsRecyclerViewAdapter;
 
 
     private ImageView profilURL;
@@ -89,24 +92,17 @@ public class CarsManagerActivity extends AppCompatActivity {
         chatEmployeeList=new ArrayList<>();
         carsList=new ArrayList<>();
 
+
         init();
         loadUserInfo();
+
 
         user = mAuth.getCurrentUser();
         userID = user.getUid();
         mProgresDiaolog = new ProgressDialog(this);
 
+        carIdFromDateBase();
 
-        if(!carsList.isEmpty()) {
-            userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Cars");
-
-            carsRecyclerViewAdapter = new CarsRecyclerViewAdapter(CarsManagerActivity.this, userDatabaseRef, carsList,nip);
-            carsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            carsListRecyclerView.setHasFixedSize(true);
-            carsListRecyclerView.setAdapter(carsRecyclerViewAdapter);
-            carsRecyclerViewAdapter.notifyDataSetChanged();
-
-        }
 
 
         add.setOnClickListener(new View.OnClickListener() {
@@ -133,33 +129,38 @@ public class CarsManagerActivity extends AppCompatActivity {
                     case R.id.navigation_home:
                         Intent course = new Intent(CarsManagerActivity.this, CoursesManagerActivity.class);
                         course.putExtra(NIP_INFORMATION,nip);
-                        course.putExtra(DRIVERS_ID_LIST,driversIdList);
-                        course.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                      //  course.putExtra(DRIVERS_ID_LIST,driversIdList);
+                      //  course.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        course.putExtra(NIP_INFORMATION,nip);
                         startActivity(course);
                         return true;
                     case R.id.navigation_dashboard:
                         Intent map = new Intent(CarsManagerActivity.this, MapManagerActivity.class);
                         map.putExtra(USER_INFORMATION, UserInformation);
-                        map.putExtra(DRIVERS_ID_LIST,driversIdList);
-                        map.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        map.putExtra(CARS_ID_LIST,carsList);
+                      //  map.putExtra(DRIVERS_ID_LIST,driversIdList);
+                     //   map.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        //map.putExtra(CARS_ID_LIST,carsList);
+                        map.putExtra(NIP_INFORMATION,nip);
                         startActivity(map);
                         return true;
                     case R.id.navigation_notifications:
                         Intent chat = new Intent(CarsManagerActivity.this, ChatListActivity.class);
                         chat.putExtra(USER_INFORMATION, UserInformation);
-                        chat.putExtra(DRIVERS_ID_LIST,driversIdList);
-                        chat.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        chat.putExtra(CARS_ID_LIST,carsList);
+                        //chat.putExtra(DRIVERS_ID_LIST,driversIdList);
+                      //  chat.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                       // chat.putExtra(CARS_ID_LIST,carsList);
+                        chat.putExtra(NIP_INFORMATION,nip);
                         startActivity(chat);
                         return true;
 
                     case R.id.navigation_friends:
                         Intent drivers = new Intent(CarsManagerActivity.this, DriversActivity.class);
                         drivers.putExtra(USER_INFORMATION, UserInformation);
-                        drivers.putExtra(DRIVERS_ID_LIST,driversIdList);
-                        drivers.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        drivers.putExtra(CARS_ID_LIST,carsList);
+                      //  drivers.putExtra(DRIVERS_ID_LIST,driversIdList);
+                     //   drivers.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        drivers.putExtra(NIP_INFORMATION,nip);
+
+                        //  drivers.putExtra(CARS_ID_LIST,carsList);
                         startActivity(drivers);
                         return true;
 
@@ -214,14 +215,16 @@ public class CarsManagerActivity extends AppCompatActivity {
         last_nameTextView = findViewById(R.id.txtLastName);
         profilURL = findViewById(R.id.avatar);
         add= findViewById(R.id.add);
-
+        //add.setVisibility(View.INVISIBLE);
     }
     private void loadUserInfo(){
         UserInformation =(ArrayList<String>)getIntent().getSerializableExtra(USER_INFORMATION);
-        driversIdList =(ArrayList<String>)getIntent().getSerializableExtra(DRIVERS_ID_LIST);
-        carsList =(ArrayList<String>)getIntent().getSerializableExtra(CARS_ID_LIST);
-        chatEmployeeList=(ArrayList<String>)getIntent().getSerializableExtra(CHAT_EMPLOYEE_ID_LIST);
-        nip=UserInformation.get(0);
+        //driversIdList =(ArrayList<String>)getIntent().getSerializableExtra(DRIVERS_ID_LIST);
+       // carsList =(ArrayList<String>)getIntent().getSerializableExtra(CARS_ID_LIST);
+      //  chatEmployeeList=(ArrayList<String>)getIntent().getSerializableExtra(CHAT_EMPLOYEE_ID_LIST);
+
+        nip= getIntent().getStringExtra(StaticVariable.NIP_INFORMATION);
+
         first_nameTextView.setText(UserInformation.get(1));
         last_nameTextView.setText(UserInformation.get(2));
         Picasso.with(this).load(UserInformation.get(3)).into(profilURL);
@@ -230,7 +233,63 @@ public class CarsManagerActivity extends AppCompatActivity {
 
 
 
-    private void toastMessage(String message) {
+    private void setCarsList(DataSnapshot dataSnapshot) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            carsList.add(ds.getKey());
+        }
+        RecyclerViewLoad();
+    }
+
+    private void carIdFromDateBase() {
+        DatabaseReference allCarDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+ "/Cars");
+        allCarDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setCarsList(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
+    }
+
+    private void RecyclerViewLoad(){
+        if(!carsList.isEmpty()) {
+            userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+ "/Cars");
+
+            carsRecyclerViewAdapter = new CarsRecyclerViewAdapter(CarsManagerActivity.this, userDatabaseRef, carsList,UserInformation,nip);
+            carsListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            carsListRecyclerView.setHasFixedSize(true);
+            carsListRecyclerView.setAdapter(carsRecyclerViewAdapter);
+            carsRecyclerViewAdapter.notifyDataSetChanged();
+
+        }
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        carsList.clear();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        carsList.clear();
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //carsRecyclerViewAdapter.notifyDataSetChanged();
+    }
+
+
+
+
+        private void toastMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 

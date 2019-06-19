@@ -9,7 +9,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,9 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-import Cars.CarAddActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
-import users.FindCars;
 import users.courses;
 
 import static users.StaticVariable.CARS_ID_LIST;
@@ -95,7 +92,7 @@ public class AddCourseActivity extends AppCompatActivity {
     }
 
     private void changeCarMileage(final String distance, final String plateNumber){
-        userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Cars");
+        userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+ "/Cars");
         userDatabaseRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -105,7 +102,7 @@ public class AddCourseActivity extends AppCompatActivity {
                         newMileageInt=Integer.parseInt(oldMileage)+Integer.parseInt(distance);
                     }
                 }
-                FirebaseDatabase.getInstance().getReference(nip+"/Cars/"+plateNumber).child("carMileage").
+                FirebaseDatabase.getInstance().getReference(nip+ "/Cars/" +plateNumber).child("carMileage").
                         setValue(String.valueOf(newMileageInt)).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -181,21 +178,35 @@ public class AddCourseActivity extends AppCompatActivity {
                 distancee,numberInvoicee,numberOfPalletss,costt);
 
 
-        FirebaseDatabase.getInstance().getReference(nip+"/Courses/").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push().setValue(course).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseDatabase.getInstance().getReference(nip+"/Courses/").push().setValue(course).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(AddCourseActivity.this,"Successful course car",Toast.LENGTH_LONG).show();
                     changeCarMileage(distancee,plateNumberr);
 
-                    Intent intent = new Intent(AddCourseActivity.this, CoursesManagerActivity.class);
-                    intent.putExtra(NIP_INFORMATION,nip);
-                    startActivity(intent);
                 } else {
                     Toast.makeText(AddCourseActivity.this,"Error during course car",Toast.LENGTH_LONG).show();
                 }
             }
         });
+
+        FirebaseDatabase.getInstance().getReference(nip+"/Employee/").child(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/Courses/").push().setValue(course).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    Toast.makeText(AddCourseActivity.this,"Successful course car",Toast.LENGTH_LONG).show();
+
+                    Intent intent = new Intent(AddCourseActivity.this, CoursesManagerActivity.class);
+                    intent.putExtra(NIP_INFORMATION,nip);
+                    startActivity(intent);
+
+                } else {
+                    Toast.makeText(AddCourseActivity.this,"Error during course car",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
 
 
 

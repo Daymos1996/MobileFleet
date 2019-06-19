@@ -17,21 +17,26 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import cars.CarsRecyclerViewAdapter;
 import chat.ChatListActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import login.LoginActivity;
-import Cars.CarsManagerActivity;
+import cars.CarsManagerActivity;
 import courses.CoursesManagerActivity;
 import profile.EditProfilInformationActivity;
 import profile.MapManagerActivity;
+import users.StaticVariable;
 
 import static users.StaticVariable.CARS_ID_LIST;
 import static users.StaticVariable.CHAT_EMPLOYEE_ID_LIST;
@@ -96,16 +101,7 @@ public class DriversActivity extends AppCompatActivity {
 
 
 
-        userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
-
-
-        driversRecyclerViewAdapter = new DriversRecyclerViewAdapter(DriversActivity.this, userDatabaseRef,driversIdList);
-        driverListRecyclerView.setLayoutManager( new LinearLayoutManager(this));
-        driverListRecyclerView.setHasFixedSize(true);
-        driverListRecyclerView.setAdapter(driversRecyclerViewAdapter);
-        driversRecyclerViewAdapter.notifyDataSetChanged();
-
-
+        employeeIdFromDatabase();
 
 
 
@@ -126,25 +122,27 @@ public class DriversActivity extends AppCompatActivity {
                     case R.id.navigation_home:
                         Intent course = new Intent(DriversActivity.this, CoursesManagerActivity.class);
                         course.putExtra(NIP_INFORMATION,nip);
-                        course.putExtra(DRIVERS_ID_LIST,driversIdList);
-                        course.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        course.putExtra(CARS_ID_LIST,carsList);
+                        //course.putExtra(DRIVERS_ID_LIST,driversIdList);
+                        //course.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        //course.putExtra(CARS_ID_LIST,carsList);
                         startActivity(course);
                         return true;
                     case R.id.navigation_dashboard:
                         Intent map = new Intent(DriversActivity.this, MapManagerActivity.class);
                         map.putExtra(USER_INFORMATION, UserInformation);
-                        map.putExtra(DRIVERS_ID_LIST,driversIdList);
-                        map.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        map.putExtra(CARS_ID_LIST,carsList);
+                        //map.putExtra(DRIVERS_ID_LIST,driversIdList);
+                       // map.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        //map.putExtra(CARS_ID_LIST,carsList);
+                        map.putExtra(NIP_INFORMATION,nip);
                         startActivity(map);
                         return true;
                     case R.id.navigation_notifications:
                         Intent chat = new Intent(DriversActivity.this, ChatListActivity.class);
                         chat.putExtra(USER_INFORMATION, UserInformation);
-                        chat.putExtra(DRIVERS_ID_LIST,driversIdList);
-                        chat.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        chat.putExtra(CARS_ID_LIST,carsList);
+                      //  chat.putExtra(DRIVERS_ID_LIST,driversIdList);
+                       // chat.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
+                        //chat.putExtra(CARS_ID_LIST,carsList);
+                        chat.putExtra(NIP_INFORMATION,nip);
                         startActivity(chat);
                         return true;
 
@@ -157,6 +155,7 @@ public class DriversActivity extends AppCompatActivity {
                         cars.putExtra(DRIVERS_ID_LIST,driversIdList);
                         cars.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
                         cars.putExtra(CARS_ID_LIST,carsList);
+                        cars.putExtra(NIP_INFORMATION,nip);
                         startActivity(cars);
                         return true;
 
@@ -214,10 +213,11 @@ public class DriversActivity extends AppCompatActivity {
 
     private void loadUserInfo(){
         UserInformation =(ArrayList<String>)getIntent().getSerializableExtra(USER_INFORMATION);
-        driversIdList=(ArrayList<String>)getIntent().getSerializableExtra(DRIVERS_ID_LIST);
-        chatEmployeeList=(ArrayList<String>)getIntent().getSerializableExtra(CHAT_EMPLOYEE_ID_LIST);
-        carsList =(ArrayList<String>)getIntent().getSerializableExtra(CARS_ID_LIST);
-        nip=UserInformation.get(0);
+      //  driversIdList=(ArrayList<String>)getIntent().getSerializableExtra(DRIVERS_ID_LIST);
+      //  chatEmployeeList=(ArrayList<String>)getIntent().getSerializableExtra(CHAT_EMPLOYEE_ID_LIST);
+      //   carsList =(ArrayList<String>)getIntent().getSerializableExtra(CARS_ID_LIST);
+
+        nip= getIntent().getStringExtra(StaticVariable.NIP_INFORMATION);
         first_nameTextView.setText(UserInformation.get(1));
         last_nameTextView.setText(UserInformation.get(2));
         Picasso.with(this).load(UserInformation.get(3)).into(profilURL);
@@ -228,21 +228,63 @@ public class DriversActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
+    private void setDriversList(DataSnapshot dataSnapshot) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            if (!ds.getKey().equals(userID)) {
+                driversIdList.add(ds.getKey());
+            }
+
+        }
+        RecyclerViewLoad();
+    }
+
+    private void employeeIdFromDatabase() {
+        DatabaseReference allEmployeeDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
+        allEmployeeDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setDriversList(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
+    }
+
+    private void RecyclerViewLoad(){
+        if(!driversIdList.isEmpty()) {
+
+            userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
+
+
+            driversRecyclerViewAdapter = new DriversRecyclerViewAdapter(DriversActivity.this, userDatabaseRef,driversIdList,UserInformation,nip);
+            driverListRecyclerView.setLayoutManager( new LinearLayoutManager(this));
+            driverListRecyclerView.setHasFixedSize(true);
+            driverListRecyclerView.setAdapter(driversRecyclerViewAdapter);
+            driversRecyclerViewAdapter.notifyDataSetChanged();
+
+
+        }
+
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
-        driversRecyclerViewAdapter.notifyDataSetChanged();
+        driversIdList.clear();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        driversRecyclerViewAdapter.notifyDataSetChanged();
+        driversIdList.clear();
+
     }
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        driversRecyclerViewAdapter.notifyDataSetChanged();
     }
 
 

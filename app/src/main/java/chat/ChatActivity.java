@@ -31,6 +31,7 @@ import users.StaticVariable;
 
 
 import static users.StaticVariable.CHAT_TABLE;
+import static users.StaticVariable.USER_INFORMATION;
 
 
 public class ChatActivity extends AppCompatActivity {
@@ -95,6 +96,7 @@ public class ChatActivity extends AppCompatActivity {
 
         otherUserID = getIntent().getStringExtra(StaticVariable.KEY_CHAT);
         nip = getIntent().getStringExtra(StaticVariable.NIP_INFORMATION);
+        UserInformation =(ArrayList<String>)getIntent().getSerializableExtra(USER_INFORMATION);
         setOnCLickActionOnSendMessageButton();
 
 

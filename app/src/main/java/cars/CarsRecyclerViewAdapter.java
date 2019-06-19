@@ -1,4 +1,4 @@
-package Cars;
+package cars;
 
 import android.content.Context;
 import android.content.Intent;
@@ -19,25 +19,23 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import chat.ChatActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
-import drivers.DriversRecyclerViewAdapter;
-import profile.ProfileActivity;
 import users.FindCars;
-import users.FindDrivers;
 import users.StaticVariable;
 
 public class CarsRecyclerViewAdapter extends RecyclerView.Adapter<CarsRecyclerViewAdapter.ItemViewHolder> {
     private List<FindCars> carsList = new ArrayList<>();
     private ArrayList<String> carInformation = new ArrayList<>();
+    private ArrayList<String> userInformation = new ArrayList<>();
 
     private Context mContext;
     private DatabaseReference mRef;
 
 
-    public CarsRecyclerViewAdapter(Context mContext, DatabaseReference ref, final ArrayList<String> carsIdList, final String nip) {
+    public CarsRecyclerViewAdapter(Context mContext, DatabaseReference ref, final ArrayList<String> carsIdList, ArrayList<String> userInformation, final String nip) {
         this.mContext = mContext;
         this.mRef = ref;
+        this.userInformation=userInformation;
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -116,13 +114,9 @@ public class CarsRecyclerViewAdapter extends RecyclerView.Adapter<CarsRecyclerVi
                 carInformation.add(carsList.get(i).getOc());
                 carInformation.add(carsList.get(i).getNip());
 
-                // String id = driversList.get(i).getId();
-                // String nip=driversList.get(i).getNip();
                 Intent intent = new Intent(mContext, CarInformationActivity.class);
                 intent.putExtra(StaticVariable.CAR_INFORMATION, carInformation);
-               // intent.putExtra(StaticVariable.KEY_FRIEND_ID, id);
-               // intent.putExtra(StaticVariable.KEY_CHAT, id);
-               // intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
+                intent.putExtra(StaticVariable.USER_INFORMATION, userInformation);
                 mContext.startActivity(intent);
 
             }

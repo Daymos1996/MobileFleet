@@ -1,19 +1,13 @@
 package courses;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,18 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
-import Cars.CarAddActivity;
-import Cars.CarsManagerActivity;
 import at.markushi.ui.CircleButton;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
-import drivers.DriversRecyclerViewAdapter;
-import users.StaticVariable;
-
-import static users.StaticVariable.CARS_ID_LIST;
-import static users.StaticVariable.DRIVERS_ID_LIST;
-import static users.StaticVariable.USER_INFORMATION;
 
 
 public class HistoryCoursesFragment extends Fragment {
@@ -53,6 +38,8 @@ public class HistoryCoursesFragment extends Fragment {
     private DatabaseReference userDatabaseRef;
     private ArrayList<String> UserInformation;
     private ArrayList<String> HistoryUserCourses;
+    private ArrayList<String> HistoryAllUserCourses;
+    private ArrayList<String> carsList;
     private View mMainView;
     private String nip;
     private String position;
@@ -73,11 +60,14 @@ public class HistoryCoursesFragment extends Fragment {
 
 
         HistoryUserCourses=new ArrayList<>();
+        HistoryAllUserCourses=new ArrayList<>();
+        carsList=new ArrayList<>();
         UserInformation = new ArrayList<>();
+
 
         init();
 
-        todayUserIdCourse();
+        HistoryUserIdCourse();
 
 
 
@@ -92,25 +82,27 @@ public class HistoryCoursesFragment extends Fragment {
         add.setVisibility(View.INVISIBLE);
         CoursesManagerActivity activity = (CoursesManagerActivity) getActivity();
         UserInformation = activity.getMyUserInformation();
+       // carsList = activity.getCarsListInformation();
         nip=UserInformation.get(0);
 
     }
 
-    private void setTodayUserList(DataSnapshot dataSnapshot) {
+
+    private void setHistoryUserList(DataSnapshot dataSnapshot) {
         for (DataSnapshot ds : dataSnapshot.getChildren()) {
-             HistoryUserCourses.add(ds.getKey());
+                HistoryUserCourses.add(ds.getKey());
 
         }
         RecyclerViewLoad();
     }
 
-    private void todayUserIdCourse() {
-        DatabaseReference allTodaysCourses = FirebaseDatabase.getInstance().getReference().child(nip+"/Courses/")
-                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+    private void HistoryUserIdCourse() {
+        DatabaseReference allTodaysCourses = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/Courses/");
         allTodaysCourses.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setTodayUserList(dataSnapshot);
+                setHistoryUserList(dataSnapshot);
             }
 
             @Override
@@ -120,13 +112,39 @@ public class HistoryCoursesFragment extends Fragment {
         });
     }
 
+    private void setHistoryAllUserList(DataSnapshot dataSnapshot) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                HistoryAllUserCourses.add(ds.getKey());
+
+        }
+
+        RecyclerViewLoadAllUser();
+    }
+
+    private void historyAllUserIdCourse() {
+        DatabaseReference allTodaysCourses = FirebaseDatabase.getInstance().getReference().child(nip+"/Courses/");
+        allTodaysCourses.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setHistoryAllUserList(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
+    }
+
+
     private void RecyclerViewLoad(){
         if(HistoryUserCourses != null && (!HistoryUserCourses.isEmpty())) {
-            userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Courses/")
-                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
 
-            coursesRecyclerViewAdapter = new CoursesRecyclerViewAdapter(getActivity().getBaseContext(), userDatabaseRef, HistoryUserCourses);
+            userDatabaseRef= FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/")
+                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid()+"/Courses/");
+
+            coursesRecyclerViewAdapter = new CoursesRecyclerViewAdapter(getActivity().getBaseContext(), userDatabaseRef, HistoryUserCourses,nip);
             CoursesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
             CoursesRecyclerView.setHasFixedSize(true);
             CoursesRecyclerView.setAdapter(coursesRecyclerViewAdapter);
@@ -136,7 +154,20 @@ public class HistoryCoursesFragment extends Fragment {
 
     }
 
+    private void RecyclerViewLoadAllUser(){
+        if(HistoryAllUserCourses != null && (!HistoryAllUserCourses.isEmpty())) {
 
+            userDatabaseRef= FirebaseDatabase.getInstance().getReference().child(nip+"/Courses/");
+
+            coursesRecyclerViewAdapter = new CoursesRecyclerViewAdapter(getActivity().getBaseContext(), userDatabaseRef, HistoryAllUserCourses,nip);
+            CoursesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
+            CoursesRecyclerView.setHasFixedSize(true);
+            CoursesRecyclerView.setAdapter(coursesRecyclerViewAdapter);
+            coursesRecyclerViewAdapter.notifyDataSetChanged();
+
+        }
+
+    }
     private void toastMessage(String message) {
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }

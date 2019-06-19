@@ -56,7 +56,7 @@ import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 
-import Cars.CarsManagerActivity;
+import cars.CarsManagerActivity;
 import chat.ChatActivity;
 import chat.ChatListActivity;
 import courses.CoursesManagerActivity;
@@ -139,6 +139,8 @@ public class MapManagerActivity extends FragmentActivity implements
         init();
         loadUserInfo();
 
+        employeeIdFromDatabase();
+
         user = mAuth.getCurrentUser();
         if (user != null) {
             userID = user.getUid();
@@ -175,9 +177,6 @@ public class MapManagerActivity extends FragmentActivity implements
                     case R.id.navigation_home:
                         Intent course = new Intent(MapManagerActivity.this, CoursesManagerActivity.class);
                         course.putExtra(NIP_INFORMATION,nip);
-                        course.putExtra(DRIVERS_ID_LIST,driversIdList);
-                        course.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        course.putExtra(CARS_ID_LIST,carsList);
                         startActivity(course);
                         return true;
                     case R.id.navigation_dashboard:
@@ -185,27 +184,21 @@ public class MapManagerActivity extends FragmentActivity implements
                     case R.id.navigation_notifications:
                         Intent chat = new Intent(MapManagerActivity.this, ChatListActivity.class);
                         chat.putExtra(USER_INFORMATION, UserInformation);
-                        chat.putExtra(DRIVERS_ID_LIST,driversIdList);
-                        chat.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        chat.putExtra(CARS_ID_LIST,carsList);
+                        chat.putExtra(NIP_INFORMATION,nip);
                         startActivity(chat);
                         return true;
 
                     case R.id.navigation_friends:
                         Intent drivers = new Intent(MapManagerActivity.this, DriversActivity.class);
                         drivers.putExtra(USER_INFORMATION, UserInformation);
-                        drivers.putExtra(DRIVERS_ID_LIST,driversIdList);
-                        drivers.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        drivers.putExtra(CARS_ID_LIST,carsList);
+                        drivers.putExtra(NIP_INFORMATION,nip);
                         startActivity(drivers);
                         return true;
 
                     case R.id.navigation_cars:
                         Intent cars = new Intent(MapManagerActivity.this, CarsManagerActivity.class);
                         cars.putExtra(USER_INFORMATION, UserInformation);
-                        cars.putExtra(DRIVERS_ID_LIST,driversIdList);
-                        cars.putExtra(CHAT_EMPLOYEE_ID_LIST, chatEmployeeList);
-                        cars.putExtra(CARS_ID_LIST,carsList);
+                        cars.putExtra(NIP_INFORMATION,nip);
                         startActivity(cars);
                         return true;
                 }
@@ -261,12 +254,9 @@ public class MapManagerActivity extends FragmentActivity implements
 
     private void loadUserInfo(){
         UserInformation =(ArrayList<String>)getIntent().getSerializableExtra(USER_INFORMATION);
-        driversIdList =(ArrayList<String>)getIntent().getSerializableExtra(DRIVERS_ID_LIST);
-        chatEmployeeList =(ArrayList<String>)getIntent().getSerializableExtra(CHAT_EMPLOYEE_ID_LIST);
-        carsList =(ArrayList<String>)getIntent().getSerializableExtra(CARS_ID_LIST);
+        nip= getIntent().getStringExtra(StaticVariable.NIP_INFORMATION);
 
 
-        nip=UserInformation.get(0);
         first_nameTextView.setText(UserInformation.get(1));
         last_nameTextView.setText(UserInformation.get(2));
         Picasso.with(this).load(UserInformation.get(3)).into(profilURL);
@@ -632,6 +622,29 @@ public class MapManagerActivity extends FragmentActivity implements
 
     }
 
+    private void setDriversList(DataSnapshot dataSnapshot) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            if (!ds.getKey().equals(userID)) {
+                driversIdList.add(ds.getKey());
+            }
+
+        }
+    }
+
+    private void employeeIdFromDatabase() {
+        DatabaseReference allEmployeeDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
+        allEmployeeDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setDriversList(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
+    }
 
     @Override
     protected void onDestroy() {

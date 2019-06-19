@@ -3,6 +3,7 @@ package chat;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,11 +14,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import courses.CoursesManagerActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import drivers.DriversRecyclerViewAdapter;
 import users.StaticVariable;
@@ -30,12 +37,14 @@ public class ListMessageFromEmployessFragment extends Fragment {
     private ImageView profilURL;
     private TextView first_nameTextView;
     private TextView last_nameTextView;
+    FirebaseUser user;
+    private FirebaseAuth mAuth;
 
     private RecyclerView ChatEmployeeListRecyclerView;
     private View mMainView;
 
     private String userID;
-    public static ArrayList<String> chatFriendsIdList;
+    public  ArrayList<String> chatFriendsIdList;
 
 
 
@@ -60,22 +69,13 @@ public class ListMessageFromEmployessFragment extends Fragment {
         init();
         loadUserInfo();
 
-        userID = getActivity().getIntent().getStringExtra(StaticVariable.KEY_FRIEND_ID);
+        user = mAuth.getCurrentUser();
+       userID=user.getUid();
+       userID = getActivity().getIntent().getStringExtra(StaticVariable.KEY_FRIEND_ID);
 
-        chatFriendsIdList = (ArrayList<String>) getActivity().getIntent().getSerializableExtra(StaticVariable.CHAT_EMPLOYEE_ID_LIST);
 
-        toastMessage(String.valueOf(chatFriendsIdList.size()));
+        chatEmployeeIdFromDatabase();
 
-        if(!chatFriendsIdList.isEmpty()) {
-            userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
-
-            chatFriendsRecyclerViewAdapter = new ChatFriendsRecyclerViewAdapter(getActivity().getBaseContext(), userDatabaseRef, chatFriendsIdList);
-            ChatEmployeeListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
-            ChatEmployeeListRecyclerView.setHasFixedSize(true);
-            ChatEmployeeListRecyclerView.setAdapter(chatFriendsRecyclerViewAdapter);
-            chatFriendsRecyclerViewAdapter.notifyDataSetChanged();
-
-        }
 
         return  mMainView;
     }
@@ -88,22 +88,59 @@ public class ListMessageFromEmployessFragment extends Fragment {
     }
 
     private void loadUserInfo(){
-        UserInformation =(ArrayList<String>)getActivity().getIntent().getSerializableExtra(USER_INFORMATION);
+        CoursesManagerActivity activity = (CoursesManagerActivity) getActivity();
+        UserInformation = activity.getMyUserInformation();
+        //  carsList = activity.getCarsListInformation();
         nip=UserInformation.get(0);
-        position=UserInformation.get(1);
+
 
     }
+
+    private void setChatEmployeeListList(DataSnapshot dataSnapshot) {
+        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+            chatFriendsIdList.add(ds.getKey());
+        }
+        RecyclerViewLoad();
+    }
+    private void chatEmployeeIdFromDatabase() {
+        DatabaseReference allEmployeeDatabaseRef = FirebaseDatabase.getInstance().getReference(nip+"/Employee/"+userID+"/chat");
+        allEmployeeDatabaseRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setChatEmployeeListList(dataSnapshot);
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+
+        });
+    }
+
+    private void RecyclerViewLoad(){
+        if(!chatFriendsIdList.isEmpty()) {
+            userDatabaseRef = FirebaseDatabase.getInstance().getReference().child(nip+"/Employee/");
+
+            //chatFriendsRecyclerViewAdapter = new ChatFriendsRecyclerViewAdapter(getActivity().getBaseContext(), userDatabaseRef, chatFriendsIdList,UserInformation);
+            ChatEmployeeListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity().getBaseContext()));
+            ChatEmployeeListRecyclerView.setHasFixedSize(true);
+            ChatEmployeeListRecyclerView.setAdapter(chatFriendsRecyclerViewAdapter);
+            chatFriendsRecyclerViewAdapter.notifyDataSetChanged();
+
+        }
+
+    }
+
 
     @Override
     public void onStart() {
         super.onStart();
-        //  friendsRecyclerViewAdapter.notifyDataSetChanged();
+        chatFriendsIdList.clear();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        //friendsRecyclerViewAdapter.notifyDataSetChanged();
+        chatFriendsIdList.clear();
     }
     @Override
     public void onDestroy() {
@@ -113,8 +150,5 @@ public class ListMessageFromEmployessFragment extends Fragment {
 
 
 
-    private void toastMessage(String message) {
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-    }
 
 }

@@ -127,8 +127,8 @@ public class RegisterManagerActivity extends AppCompatActivity {
         progressDialog.setMessage("The registration proceeds...");
         progressDialog.show();
 
-        final firm firm = new firm(nip,nameFirm, adressFirm);
 
+        final firm firm = new firm(nip,nameFirm, adressFirm);
         FirebaseDatabase.getInstance().getReference(nip).setValue(firm).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

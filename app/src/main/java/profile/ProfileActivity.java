@@ -22,13 +22,16 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import cars.CarsManagerActivity;
 import chat.ChatActivity;
 import daymos.lodz.uni.math.pl.mobilefleet.R;
 import de.hdodenhof.circleimageview.CircleImageView;
+import drivers.DriversActivity;
 import login.LoginActivity;
 import users.StaticVariable;
 
 import static users.StaticVariable.DRIVER_INFORMATION;
+import static users.StaticVariable.USER_INFORMATION;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -36,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "ViewDatabase";
     private Toolbar mToolbar;
     private ArrayList<String> DriverInformation;
+    private ArrayList<String> UserInformation;
     private ImageView image;
     private TextView txtName;
     private TextView txtPhone;
@@ -125,6 +129,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void loadUserInfo(){
 
         DriverInformation =(ArrayList<String>)getIntent().getSerializableExtra(DRIVER_INFORMATION);
+        UserInformation=(ArrayList<String>)getIntent().getSerializableExtra(USER_INFORMATION);
         driverID=DriverInformation.get(0);
         txtName.setText(DriverInformation.get(1));
         txtPhone.setText(DriverInformation.get(2));
@@ -177,6 +182,10 @@ public class ProfileActivity extends AppCompatActivity {
     }
     @Override
     protected void onDestroy() {
+        Intent intent = new Intent(this, DriversActivity.class);
+        intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
+        intent.putExtra(StaticVariable.USER_INFORMATION,UserInformation);
+        startActivity(intent);;
         super.onDestroy();
 
     }

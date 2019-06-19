@@ -1,4 +1,4 @@
-package Cars;
+package cars;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -153,7 +153,7 @@ public class CarAddActivity extends AppCompatActivity {
         FindCars car = new FindCars("https://firebasestorage.googleapis.com/v0/b/mobilefleet-547ef.appspot.com/o/truck.png?alt=media&token=b6565e1c-c14b-410e-bb64-6c98c1d2429a",carBrandd,plateNumberr,vinNumberr,carMileagee,engineCapacityy,
                 motorPowerr,yearProductionn,technicalExaminationn,termOCC,nip);
 
-        FirebaseDatabase.getInstance().getReference(nip+"/Cars/"+plateNumberr).setValue(car).addOnCompleteListener(new OnCompleteListener<Void>() {
+        FirebaseDatabase.getInstance().getReference(nip+ "/cars/" +plateNumberr).setValue(car).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {

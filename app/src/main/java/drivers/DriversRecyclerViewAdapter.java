@@ -28,14 +28,17 @@ import users.StaticVariable;
 public class DriversRecyclerViewAdapter extends RecyclerView.Adapter<DriversRecyclerViewAdapter.ItemViewHolder> {
     private List<FindDrivers> driversList = new ArrayList<>();
     private ArrayList<String> driverInformation = new ArrayList<>();
+    private ArrayList<String> userInformation = new ArrayList<>();
+
 
     private Context mContext;
     private DatabaseReference mRef;
 
 
-    public DriversRecyclerViewAdapter(Context mContext, DatabaseReference ref, final ArrayList<String> driversIdList) {
+    public DriversRecyclerViewAdapter(Context mContext, DatabaseReference ref, final ArrayList<String> driversIdList,ArrayList<String> userInformation, final String nip) {
         this.mContext = mContext;
         this.mRef = ref;
+        this.userInformation=userInformation;
         mRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -100,6 +103,7 @@ public class DriversRecyclerViewAdapter extends RecyclerView.Adapter<DriversRecy
                 intent.putExtra(StaticVariable.KEY_FRIEND_ID, id);
                 intent.putExtra(StaticVariable.KEY_CHAT, id);
                 intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
+                intent.putExtra(StaticVariable.USER_INFORMATION,userInformation);
                 mContext.startActivity(intent);
 
             }
@@ -113,6 +117,7 @@ public class DriversRecyclerViewAdapter extends RecyclerView.Adapter<DriversRecy
                 Intent intent = new Intent(mContext, ChatActivity.class);
                 intent.putExtra(StaticVariable.KEY_CHAT, id);
                 intent.putExtra(StaticVariable.NIP_INFORMATION,nip);
+                intent.putExtra(StaticVariable.USER_INFORMATION,userInformation);
                 mContext.startActivity(intent);
                 return true;
             }
